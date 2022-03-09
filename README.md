@@ -1,4 +1,4 @@
-# tracky_v2
+# tracky
 
 FIXME: description
 

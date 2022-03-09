@@ -1,4 +1,4 @@
-(ns tracky-v2.handlers.index
+(ns tracky.handlers.index
   (:require [integrant.core :as ig]
             [hiccup.page :refer [html5]]))
 
@@ -7,7 +7,7 @@
    :headers {"Content-type" "text/html"}
    :body body})
 
-(defmethod ig/init-key :tracky-v2.handlers/index [_ _]
+(defmethod ig/init-key :tracky.handlers/index [_ _]
   (-> (html5
        [:head
         [:title "App"]
