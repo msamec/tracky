@@ -1,7 +1,15 @@
 {:duct.profile/base
  {:duct.core/project-ns tracky-v2
 
-  :duct.router/cascading []}
+  :duct.handler/root
+  {:router #ig/ref :duct.router/reitit}
+  
+  :duct.router/reitit
+  {:routes [["/test" {:get {:handler #ig/ref :tracky-v2.handlers/index}}]]
+   :reitit.rings/opts {}
+   :reitit.ring/deafult-handlers {}}
+  
+  :tracky-v2.handlers/index {}}
 
  :duct.profile/dev   #duct/include "dev"
  :duct.profile/local #duct/include "local"
