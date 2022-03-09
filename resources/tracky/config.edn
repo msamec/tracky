@@ -5,11 +5,13 @@
   {:router #ig/ref :duct.router/reitit}
   
   :duct.router/reitit
-  {:routes [["/test" {:get {:handler #ig/ref :tracky.handlers/index}}]]
+  {:routes [["/login" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/login}}]
+            ["/" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/index}}]]
    :reitit.rings/opts {}
    :reitit.ring/deafult-handlers {}}
   
-  :tracky.handlers/index {}}
+  :tracky.presentation.http.controllers.user-ctrl/login {}
+  :tracky.presentation.http.controllers.user-ctrl/index {}}
 
  :duct.profile/dev   #duct/include "dev"
  :duct.profile/local #duct/include "local"

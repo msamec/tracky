@@ -1,5 +1,5 @@
 (ns tracky.presentation.templates.login
-  (:require [presentation.templates.base :refer [base]]
+  (:require [tracky.presentation.templates.base :refer [base]]
             [hiccup.element :refer [link-to]]))
 
 (defn render []
