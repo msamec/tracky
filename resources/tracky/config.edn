@@ -3,15 +3,25 @@
 
   :duct.handler/root
   {:router #ig/ref :duct.router/reitit}
-  
+
   :duct.router/reitit
   {:routes [["/login" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/login}}]
             ["/" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/index}}]]
    :reitit.rings/opts {}
    :reitit.ring/deafult-handlers {}}
-  
+
   :tracky.presentation.http.controllers.user-ctrl/login {}
-  :tracky.presentation.http.controllers.user-ctrl/index {}}
+  :tracky.presentation.http.controllers.user-ctrl/index {}
+
+  :duct.migrator.ragtime/resources
+  {:path "tracky/migrations"}
+
+  :duct.migrator/ragtime
+  {:database   #ig/ref :duct.database/sql
+   :logger     #ig/ref :duct/logger
+   :strategy   :raise-error
+   :migrations #ig/ref :duct.migrator.ragtime/resources
+   :migrations-table "migrations"}}
 
  :duct.profile/dev   #duct/include "dev"
  :duct.profile/local #duct/include "local"

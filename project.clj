@@ -9,7 +9,8 @@
                  [duct/module.web "0.7.3"]
                  [org.postgresql/postgresql "42.2.19"]
                  [nl.mediquest/duct.module.reitit "1.0.3"]
-                 [hiccup/hiccup "1.0.5"]]
+                 [hiccup/hiccup "1.0.5"]
+                 [duct/migrator.ragtime "0.3.2"]]
   :plugins [[duct/lein-duct "0.12.3"]]
   :main ^:skip-aot tracky.main
   :uberjar-name  "tracky-standalone.jar"
