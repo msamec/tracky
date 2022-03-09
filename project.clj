@@ -1,4 +1,4 @@
-(defproject tracky_v2 "0.1.0-SNAPSHOT"
+(defproject tracky "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :min-lein-version "2.0.0"
@@ -11,8 +11,8 @@
                  [nl.mediquest/duct.module.reitit "1.0.3"]
                  [hiccup/hiccup "1.0.5"]]
   :plugins [[duct/lein-duct "0.12.3"]]
-  :main ^:skip-aot tracky-v2.main
-  :uberjar-name  "tracky_v2-standalone.jar"
+  :main ^:skip-aot tracky.main
+  :uberjar-name  "tracky-standalone.jar"
   :resource-paths ["resources" "target/resources"]
   :prep-tasks     ["javac" "compile" ["run" ":duct/compiler"]]
   :middleware     [lein-duct.plugin/middleware]
