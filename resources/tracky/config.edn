@@ -6,12 +6,29 @@
 
   :duct.router/reitit
   {:routes [["/login" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/login}}]
-            ["/" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/index}}]]
-   :reitit.rings/opts {}
+            ["/" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/index}}]
+            ["/oauth2" {:get {:handler #ig/ref :tracky.presentation.http.controllers.oauth2-ctrl/authorize}}]
+            ["/oauth2/callback" {:get {:handler #ig/ref :tracky.presentation.http.controllers.oauth2-ctrl/callback}}]]
+   :reitit.rings/opts {:data #ig/ref :tracky.infrastructure.reitit/opts}
    :reitit.ring/deafult-handlers {}}
+
+  :tracky.infrastructure.reitit/opts {}
 
   :tracky.presentation.http.controllers.user-ctrl/login {}
   :tracky.presentation.http.controllers.user-ctrl/index {}
+
+  :tracky.presentation.http.controllers.oauth2-ctrl/authorize {:config #ig/ref :tracky.presentation.http.controllers.oauth2-ctrl/config}
+  :tracky.presentation.http.controllers.oauth2-ctrl/callback {:config #ig/ref :tracky.presentation.http.controllers.oauth2-ctrl/config}
+  :tracky.presentation.http.controllers.oauth2-ctrl/config
+  {:authorize-uri "https://accounts.google.com/o/oauth2/v2/auth"
+   :access-token-uri "https://oauth2.googleapis.com/token"
+   :client-id #duct/env "GOOGLE_CLIENT_ID"
+   :client-secret #duct/env "GOOGLE_CLIENT_SECRET"
+   :scopes ["openid"]
+   :redirect-uri "/oauth2/callback"
+   :landing-uri "/"}
+
+  :duct.middleware.web/defaults {:session {:flash true, :cookie-attrs {:http-only true, :same-site :lax}}}
 
   :duct.migrator.ragtime/resources
   {:path "tracky/migrations"}
@@ -28,7 +45,5 @@
  :duct.profile/prod  {}
 
  :duct.module/logging {}
- :duct.module.web/site
- {}
- :duct.module/sql
- {}}
+ :duct.module.web/site {}
+ :duct.module/sql {}}
