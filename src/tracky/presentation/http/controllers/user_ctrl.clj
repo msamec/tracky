@@ -17,8 +17,8 @@
    constantly))
 
 (defmethod ig/init-key :tracky.presentation.http.controllers.user-ctrl/index [_ _]
-  (fn [request]
-    (let [user-id "1" ;TODO: this should be user id from jwt token
+  (fn [{:keys [] {:keys [sub]} :session}]
+    (let [user-id sub 
           entries (fetch-entries/execute! user-id)
           credential (fetch-credential/execute! user-id)]
       (->
