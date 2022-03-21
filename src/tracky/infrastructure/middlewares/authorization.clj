@@ -1,4 +1,4 @@
-(ns tracky.infrastructure.authorization
+(ns tracky.infrastructure.middlewares.authorization
   (:require [integrant.core :as ig]
             [buddy.auth.accessrules :refer [wrap-access-rules success error]]
             [ring.util.response :as resp]))
@@ -16,7 +16,7 @@
   [_request _value]
   (resp/redirect "/auth/login"))
 
-(defmethod ig/init-key :tracky.infrastructure.authorization/access-rules [_ _]
+(defmethod ig/init-key :tracky.infrastructure.middlewares/authorization [_ _]
   (fn [handler]
     (wrap-access-rules handler {:rules rules
                                 :on-error on-error})))
