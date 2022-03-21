@@ -10,7 +10,7 @@
 (defn extract-sub-from-token [{:keys [] {:keys [oauth2]} :session :as request}]
   (if (not (nil? oauth2))
     (let [sub (-> oauth2 str->jwt :claims :sub)]
-      (assoc-in request [:session :sub] sub))
+      (assoc-in request [:session :user-id] sub))
     request))
 
 (defn handle [handler]
