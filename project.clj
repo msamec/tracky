@@ -12,7 +12,9 @@
                  [hiccup/hiccup "1.0.5"]
                  [duct/migrator.ragtime "0.3.2"]
                  [clj-http "3.12.3"]
-                 [cheshire "5.10.2"]]
+                 [cheshire "5.10.2"]
+                 [magnet/buddy-auth.jwt-oidc "0.10.3"]
+                 [duct/middleware.buddy "0.2.0"]]
   :plugins [[duct/lein-duct "0.12.3"]]
   :main ^:skip-aot tracky.main
   :uberjar-name  "tracky-standalone.jar"

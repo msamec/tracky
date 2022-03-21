@@ -88,9 +88,10 @@
     (no-auth-code request)
 
     :else
-    (let [access-token (get-access-token config request)]
+    (let [access-token (get-access-token config request)
+          token (:id-token access-token)]
       (->
        (resp/redirect landing-uri)
        (assoc :session (-> session
-                           (assoc-in [::access-token :oauth2] access-token)
+                           (assoc-in [:oauth2] token)
                            (dissoc ::state)))))))

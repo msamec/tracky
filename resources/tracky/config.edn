@@ -5,14 +5,18 @@
   {:router #ig/ref :duct.router/reitit}
 
   :duct.router/reitit
-  {:routes [["/login" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/login}}]
-            ["/" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/index}}]
-            ["/oauth2" {:get {:handler #ig/ref :tracky.presentation.http.controllers.oauth2-ctrl/authorize}}]
-            ["/oauth2/callback" {:get {:handler #ig/ref :tracky.presentation.http.controllers.oauth2-ctrl/callback}}]]
-   :reitit.rings/opts {:data #ig/ref :tracky.infrastructure.reitit/opts}
+  {:routes [["/auth"
+             ["/login" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/login}}]
+             ["/oauth2" {:get {:handler #ig/ref :tracky.presentation.http.controllers.oauth2-ctrl/authorize}}]
+             ["/oauth2/callback" {:get {:handler #ig/ref :tracky.presentation.http.controllers.oauth2-ctrl/callback}}]]
+            ["/" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/index}}]]
+   :reitit.ring/opts {:data #ig/ref :tracky.infrastructure.reitit/opts}
    :reitit.ring/deafult-handlers {}}
 
-  :tracky.infrastructure.reitit/opts {}
+  :tracky.infrastructure.reitit/opts {:buddy #ig/ref :duct.middleware.buddy/authentication
+                                      :access-rules #ig/ref :tracky.infrastructure.authorization/access-rules}
+
+  :tracky.infrastructure.authorization/access-rules {}
 
   :tracky.presentation.http.controllers.user-ctrl/login {}
   :tracky.presentation.http.controllers.user-ctrl/index {}
@@ -22,10 +26,10 @@
   :tracky.presentation.http.controllers.oauth2-ctrl/config
   {:authorize-uri "https://accounts.google.com/o/oauth2/v2/auth"
    :access-token-uri "https://oauth2.googleapis.com/token"
-   :client-id #duct/env "GOOGLE_CLIENT_ID"
-   :client-secret #duct/env "GOOGLE_CLIENT_SECRET"
+   :client-id #duct/env ["GOOGLE_CLIENT_ID" Str]
+   :client-secret #duct/env ["GOOGLE_CLIENT_SECRET" Str]
    :scopes ["openid"]
-   :redirect-uri "/oauth2/callback"
+   :redirect-uri "/auth/oauth2/callback"
    :landing-uri "/"}
 
   :duct.middleware.web/defaults {:session {:flash true, :cookie-attrs {:http-only true, :same-site :lax}}}
@@ -38,7 +42,18 @@
    :logger     #ig/ref :duct/logger
    :strategy   :raise-error
    :migrations #ig/ref :duct.migrator.ragtime/resources
-   :migrations-table "migrations"}}
+   :migrations-table "migrations"}
+
+  :magnet.buddy-auth/jwt-oidc
+  {:claims {:iss #duct/env ["ISSUER_URL" Str]
+            :aud #duct/env ["AUDIENCE" Str]}
+   :jwks-uri #duct/env ["JWKS_URI" Str]
+   :logger #ig/ref :duct/logger}
+
+  :duct.middleware.buddy/authentication
+  {:backend :token
+   :token-name "Bearer"
+   :authfn  #ig/ref :magnet.buddy-auth/jwt-oidc}}
 
  :duct.profile/dev   #duct/include "dev"
  :duct.profile/local #duct/include "local"

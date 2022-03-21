@@ -1,6 +1,7 @@
 (ns tracky.presentation.http.controllers.user-ctrl
   (:require [tracky.presentation.templates.login :as login]
-            [integrant.core :as ig]))
+            [integrant.core :as ig]
+            [buddy.auth :refer [authenticated? throw-unauthorized]]))
 (defn response
   [body]
   {:status  200
@@ -14,7 +15,7 @@
    constantly))
 
 (defmethod ig/init-key :tracky.presentation.http.controllers.user-ctrl/index [_ _]
-  (->
-   "index"
-   response
-   constantly))
+  (fn [request]
+    (->
+     "index"
+     response)))
