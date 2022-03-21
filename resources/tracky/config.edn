@@ -18,6 +18,11 @@
 
   :tracky.infrastructure.authorization/access-rules {}
 
+  :tracky.infrastructure.database/credential {:db-uri #duct/env ["DB_URI" Str]}
+  :tracky.domain/credential-repository {:impl #ig/ref :tracky.infrastructure.database/credential}
+  :tracky.infrastructure.http/toggl {}
+  :tracky.domain/entry-repository {:impl #ig/ref :tracky.infrastructure.http/toggl}
+
   :tracky.presentation.http.controllers.user-ctrl/login {}
   :tracky.presentation.http.controllers.user-ctrl/index {}
 
