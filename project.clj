@@ -14,8 +14,11 @@
                  [clj-http "3.12.3"]
                  [cheshire "5.10.2"]
                  [magnet/buddy-auth.jwt-oidc "0.10.3"]
-                 [duct/middleware.buddy "0.2.0"]]
-  :plugins [[duct/lein-duct "0.12.3"]]
+                 [duct/middleware.buddy "0.2.0"]
+                 [com.verybigthings/penkala "8f38814dcfe5a23ee2c6fcdd5d2c48ccd6f4f1c7"]]
+  :plugins [[duct/lein-duct "0.12.3"]
+            [reifyhealth/lein-git-down "0.4.1"]]
+  :repositories [["public-github" {:url "git://github.com"}]]
   :main ^:skip-aot tracky.main
   :uberjar-name  "tracky-standalone.jar"
   :resource-paths ["resources" "target/resources"]
