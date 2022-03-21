@@ -1,6 +1,14 @@
 (ns tracky.presentation.http.controllers.oauth2-ctrl
   (:require [integrant.core :as ig]
-            [tracky.infrastructure.oauth2 :as oauth2]))
+            [tracky.infrastructure.oauth2 :as oauth2]
+            [tracky.presentation.templates.login :as login]))
+
+(defmethod ig/init-key :tracky.presentation.http.controllers.oauth2-ctrl/login [_ _]
+  (->
+   {:status 200
+    :headers {"Content-type" "text/html"}
+    :body (login/render)}
+   constantly))
 
 (defmethod ig/init-key :tracky.presentation.http.controllers.oauth2-ctrl/authorize [_ {:keys [config]}]
   (fn [request]

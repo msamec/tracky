@@ -45,7 +45,7 @@
      [:div.container.mx-auto
       [:div.max-w-xl.p-5.mx-auto.my-10.bg-white.rounded-md.shadow-sm
        [:div
-        (form-to [:post "/update-credential"]
+        (form-to [:post "/update-credentials"]
                  (anti-forgery-field)
                  [:div.mb-6
                   [:label.block.mb-2.text-sm.text-gray-600
