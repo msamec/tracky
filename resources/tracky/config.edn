@@ -22,7 +22,7 @@
 
   :tracky.infrastructure.middlewares/authorization {}
 
-  :tracky.infrastructure.database/credential {:db-uri #duct/env ["DATABASE_URL" Str]}
+  :tracky.infrastructure.database/credential {:db-uri #duct/env ["DB_URI" Str]}
   :tracky.domain/credential-repository {:impl #ig/ref :tracky.infrastructure.database/credential}
 
   :tracky.infrastructure.http/toggl {}
