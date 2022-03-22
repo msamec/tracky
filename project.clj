@@ -20,11 +20,13 @@
   :plugins [[duct/lein-duct "0.12.3"]
             [reifyhealth/lein-git-down "0.4.1"]]
   :repositories [["public-github" {:url "git://github.com"}]]
+  :git-down {com.verybigthings/penkala {:coordinates retro/penkala}}
   :main ^:skip-aot tracky.main
   :uberjar-name  "tracky-standalone.jar"
   :resource-paths ["resources" "target/resources"]
   :prep-tasks     ["javac" "compile" ["run" ":duct/compiler"]]
-  :middleware     [lein-duct.plugin/middleware]
+  :middleware     [lein-duct.plugin/middleware
+                   lein-git-down.plugin/inject-properties]
   :profiles
   {:dev  [:project/dev :profiles/dev]
    :repl {:prep-tasks   ^:replace ["javac" "compile"]
