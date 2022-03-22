@@ -24,8 +24,12 @@
 
   :tracky.infrastructure.database/credential {:db-uri #duct/env ["DB_URI" Str]}
   :tracky.domain/credential-repository {:impl #ig/ref :tracky.infrastructure.database/credential}
+
   :tracky.infrastructure.http/toggl {}
   :tracky.domain/entry-repository {:impl #ig/ref :tracky.infrastructure.http/toggl}
+
+  :tracky.infrastructure.http/tempo {}
+  :tracky.domain/worklog-repository {:impl #ig/ref :tracky.infrastructure.http/tempo}
 
   :tracky.presentation.http.controllers.user-ctrl/listing {}
   :tracky.presentation.http.controllers.user-ctrl/sync {}
