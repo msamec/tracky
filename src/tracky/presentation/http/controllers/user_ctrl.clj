@@ -4,7 +4,9 @@
             [tracky.application.fetch-entries :as fetch-entries]
             [tracky.application.fetch-credential :as fetch-credential]
             [ring.util.response :refer [redirect]]
-            [tracky.application.update-credential :as update-credential]))
+            [tracky.application.update-credential :as update-credential]
+            [tracky.application.sync-entry :as sync-entry]
+            [tracky.application.sync-all-entries :as sync-all-entries]))
 (defn response
   [body]
   {:status  200
@@ -21,22 +23,16 @@
        response))))
 
 (defmethod ig/init-key :tracky.presentation.http.controllers.user-ctrl/sync [_ _]
-  (fn [{:keys [] {:keys [user-id]} :session}]
-    (let [entries (fetch-entries/execute! user-id)
-          credential (fetch-credential/execute! user-id)]
-      (->
-       entries
-       (index/render credential)
-       response))))
+  (fn [request]
+    (let [{:keys [] {:keys [task-id]} :path-params} request
+          {:keys [] {:keys [user-id]} :session} request]
+      (sync-entry/execute! task-id user-id)
+      (redirect "/"))))
 
 (defmethod ig/init-key :tracky.presentation.http.controllers.user-ctrl/sync-all [_ _]
   (fn [{:keys [] {:keys [user-id]} :session}]
-    (let [entries (fetch-entries/execute! user-id)
-          credential (fetch-credential/execute! user-id)]
-      (->
-       entries
-       (index/render credential)
-       response))))
+    (sync-all-entries/execute! user-id)
+    (redirect "/")))
 
 (defmethod ig/init-key :tracky.presentation.http.controllers.user-ctrl/update-credentials [_ _]
   (fn [request]

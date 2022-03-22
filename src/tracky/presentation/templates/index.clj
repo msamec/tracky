@@ -28,7 +28,7 @@
              [:th.text-sm.font-medium.text-gray-900.px-6.py-4.text-left
               {:scope "col"} "Start date"]
              [:th.text-sm.font-medium.text-gray-900.px-6.py-4.text-left
-              {:scope "col"} (form-to [:post (str "/sync-all-tasks")]
+              {:scope "col"} (form-to [:post (str "/sync-all")]
                                       (anti-forgery-field)
                                       [:button.bg-blue-500.hover:bg-blue-700.text-white.py-1.px-2.rounded "Sync All"])]]]
            [:tbody
@@ -39,7 +39,7 @@
                [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap (seconds->duration duration)]
                [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap start-date] ;TODO format date
                [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap
-                (form-to [:post (str "/sync-task/" id)]
+                (form-to [:post (str "/sync/" id)]
                          (anti-forgery-field)
                          [:button.bg-green-500.hover:bg-green-700.text-white.py-1.px-2.rounded "Sync"])]])]])]]]
      [:div.container.mx-auto
