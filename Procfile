@@ -1,1 +1,2 @@
-web: java -jar target/tracky-standalone.jar
+web: java $JAVA_OPTS -jar target/tracky-standalone.jar
+release: lein run :duct/migrator
