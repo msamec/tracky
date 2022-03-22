@@ -5,7 +5,8 @@
             [tracky.application.fetch-credential :as fetch-credential]
             [ring.util.response :refer [redirect]]
             [tracky.application.update-credential :as update-credential]
-            [tracky.application.sync-entry :as sync-entry]))
+            [tracky.application.sync-entry :as sync-entry]
+            [tracky.application.sync-all-entries :as sync-all-entries]))
 (defn response
   [body]
   {:status  200
@@ -30,12 +31,8 @@
 
 (defmethod ig/init-key :tracky.presentation.http.controllers.user-ctrl/sync-all [_ _]
   (fn [{:keys [] {:keys [user-id]} :session}]
-    (let [entries (fetch-entries/execute! user-id)
-          credential (fetch-credential/execute! user-id)]
-      (->
-       entries
-       (index/render credential)
-       response))))
+    (sync-all-entries/execute! user-id)
+    (redirect "/")))
 
 (defmethod ig/init-key :tracky.presentation.http.controllers.user-ctrl/update-credentials [_ _]
   (fn [request]
