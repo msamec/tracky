@@ -1,7 +1,7 @@
 (ns tracky.presentation.templates.index
   (:require [tracky.presentation.templates.base :refer [base]]
             [hiccup.form :refer [form-to]]
-            [tracky.domain.date :refer [seconds->duration]]
+            [tracky.domain.service.date :refer [seconds->duration]]
             [ring.util.anti-forgery :refer [anti-forgery-field]]))
 
 (defn render [entries credential]

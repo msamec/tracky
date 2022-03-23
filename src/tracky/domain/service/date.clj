@@ -1,4 +1,4 @@
-(ns tracky.domain.date
+(ns tracky.domain.service.date
   (:require [clojure.string :as str]))
 
 (defn- parse-date [date]
