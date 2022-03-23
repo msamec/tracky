@@ -10,7 +10,7 @@
     [:meta
      {:content "width=device-width, initial-scale=1.0",
       :name "viewport"}]
-    [:title "Toggl -> Jira"]
+    [:title "Tracky"]
     (include-js "https://cdn.tailwindcss.com")
     [:script {:src "https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" :defer true}]]
    [:body.relative.antialiased.bg-gray-100 content]))
