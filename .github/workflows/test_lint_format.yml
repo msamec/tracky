@@ -23,6 +23,11 @@ jobs:
           cli: 1.10.1.693
           lein: 2.9.1
 
+      - name: Install clj kondo
+        uses: DeLaGuardo/setup-clj-kondo@master
+        with:
+          version: '2020.04.05'
+
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
@@ -36,5 +41,5 @@ jobs:
         run: lein cljfmt check
 
       - name: Lint code
-        run: clojure -M:clj-kondo --lint src test
+        run: clj-kondo --lint src test
 
