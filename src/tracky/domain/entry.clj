@@ -33,7 +33,7 @@
     (let [result ((first formatter-functions) log)]
       (if-not (nil? result)
         result
-        (recur (rest formatters))))))
+        (recur (rest formatter-functions))))))
 
 (defn create-entry
   "Creaste entry from id, log, duration, and start"
