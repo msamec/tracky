@@ -28,20 +28,25 @@
              [:th.text-sm.font-medium.text-gray-900.px-6.py-4.text-left
               {:scope "col"} "Start date"]
              [:th.text-sm.font-medium.text-gray-900.px-6.py-4.text-left
+              {:scope "col"} "Syncable"]
+             [:th.text-sm.font-medium.text-gray-900.px-6.py-4.text-left
               {:scope "col"} (form-to [:post (str "/sync-all")]
                                       (anti-forgery-field)
                                       [:button.bg-blue-500.hover:bg-blue-700.text-white.py-1.px-2.rounded "Sync All"])]]]
            [:tbody
-            (for [{:keys [id task-id description duration start-date start-time]} entries]
-              [:tr.bg-white.border-b.transition.duration-300.ease-in-out.hover:bg-gray-100
-               [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap task-id]
-               [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap description]
-               [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap (seconds->duration duration)]
-               [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap start-date] ;TODO format date
-               [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap
-                (form-to [:post (str "/sync/" id)]
-                         (anti-forgery-field)
-                         [:button.bg-green-500.hover:bg-green-700.text-white.py-1.px-2.rounded "Sync"])]])]])]]]
+            (for [{:keys [id task-id description duration start-date syncable]} entries]
+              (let [bg-color (if syncable "bg-green-200" "bg-red-100")]
+                [:tr
+                 {:class (str "border-b transition duration-300 ease-in-out " bg-color)}
+                 [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap task-id]
+                 [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap description]
+                 [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap (seconds->duration duration)]
+                 [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap start-date] ;TODO format date
+                 [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap (if syncable "Yes" "No")]
+                 [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap
+                  (if syncable (form-to [:post (str "/sync/" id)]
+                           (anti-forgery-field)
+                           [:button.bg-green-500.hover:bg-green-700.text-white.py-1.px-2.rounded "Sync"]))]]))]])]]]
      [:div.container.mx-auto
       [:div.max-w-xl.p-5.mx-auto.my-10.bg-white.rounded-md.shadow-sm
        [:div
