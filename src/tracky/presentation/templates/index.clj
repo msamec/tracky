@@ -44,9 +44,9 @@
                  [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap start-date] ;TODO format date
                  [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap (if syncable "Yes" "No")]
                  [:td.text-sm.text-gray-900.font-light.px-6.py-4.whitespace-nowrap
-                  (if syncable (form-to [:post (str "/sync/" id)]
-                                        (anti-forgery-field)
-                                        [:button.bg-green-500.hover:bg-green-700.text-white.py-1.px-2.rounded "Sync"]))]]))]])]]]
+                  (when syncable (form-to [:post (str "/sync/" id)]
+                                          (anti-forgery-field)
+                                          [:button.bg-green-500.hover:bg-green-700.text-white.py-1.px-2.rounded "Sync"]))]]))]])]]]
      [:div.container.mx-auto
       [:div.max-w-xl.p-5.mx-auto.my-10.bg-white.rounded-md.shadow-sm
        [:div

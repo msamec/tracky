@@ -1,4 +1,4 @@
-name: Tests
+name: "Test, lint, format"
 on:
   push:
     branches:
@@ -30,3 +30,9 @@ jobs:
 
       - name: Run tests
         run: bin/kaocha
+
+      - name: Check code format
+        run: lein cljfmt check
+
+      - name: Lint code
+        run: lein clj-kondo --lint src test

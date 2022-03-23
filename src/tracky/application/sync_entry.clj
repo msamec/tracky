@@ -6,9 +6,7 @@
 (defn execute! [task-id user-id]
   (let [credential (credential-repository/fetch! user-id)
         entry (entry-repository/one! task-id credential)]
-    (if (true? (:syncable entry))
-      (do
-        (->
-         entry
-         (worklog-repository/save! credential))
-        (entry-repository/add-tags! [task-id] credential)))))
+    (when (true? (:syncable entry))
+      (->
+       entry
+       (worklog-repository/save! credential)))))
