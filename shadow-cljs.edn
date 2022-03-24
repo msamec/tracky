@@ -1,0 +1,13 @@
+{:source-paths
+ ["src"]
+
+ :dependencies
+ [[reagent "1.1.0"]]
+
+ :builds
+ {:app
+  {:target :browser
+   :output-dir "resources/tracky/public/app/js"
+   :asset-path "/app/js"
+   :modules {:main
+             {:init-fn tracky.presentation.cljs.app/init}}}}}
