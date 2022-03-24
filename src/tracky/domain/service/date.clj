@@ -36,10 +36,10 @@
         min     (quot (last hours) seconds-in-minute)
         sec     (rem (last hours) seconds-in-minute)]
     (str/join ", "
-                 (filter #(not (str/blank? %))
-                         (conj []
-                               (when (> wk 0) (str wk " wk"))
-                               (when (> d 0) (str d " d"))
-                               (when (> hr 0) (str hr " hr"))
-                               (when (> min 0) (str min " min"))
-                               (when (> sec 0) (str sec " sec")))))))
+              (filter #(not (str/blank? %))
+                      (conj []
+                            (when (> wk 0) (str wk " wk"))
+                            (when (> d 0) (str d " d"))
+                            (when (> hr 0) (str hr " hr"))
+                            (when (> min 0) (str min " min"))
+                            (when (> sec 0) (str sec " sec")))))))

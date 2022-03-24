@@ -18,7 +18,9 @@
                  [com.verybigthings/penkala "8f38814dcfe5a23ee2c6fcdd5d2c48ccd6f4f1c7"]
                  [clj-jwt/clj-jwt "0.1.1"]]
   :plugins [[duct/lein-duct "0.12.3"]
-            [reifyhealth/lein-git-down "0.4.1"]]
+            [reifyhealth/lein-git-down "0.4.1"]
+            [lein-cljfmt "0.8.0"]
+            [com.github.clj-kondo/lein-clj-kondo "0.1.3"]]
   :repositories [["public-github" {:url "git://github.com"}]]
   :git-down {com.verybigthings/penkala {:coordinates retro/penkala}}
   :main ^:skip-aot tracky.main

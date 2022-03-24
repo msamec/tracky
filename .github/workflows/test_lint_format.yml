@@ -1,11 +1,11 @@
-name: Tests
+name: "Test, lint, format"
 on:
   push:
     branches:
       - master
       - 'feature/**'
 jobs:
-  test:
+  test-lint-format:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,6 +21,7 @@ jobs:
         uses: DeLaGuardo/setup-clojure@3.7
         with:
           cli: 1.10.1.693
+          lein: 2.9.1
 
       - name: Cache dependencies
         uses: actions/cache@v2
@@ -30,3 +31,9 @@ jobs:
 
       - name: Run tests
         run: bin/kaocha
+
+      - name: Check code format
+        run: lein cljfmt check
+
+      - name: Lint code
+        run: lein clj-kondo --lint src
