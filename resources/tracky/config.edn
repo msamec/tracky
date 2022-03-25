@@ -11,7 +11,7 @@
              ["/oauth2/callback" {:get {:handler #ig/ref :tracky.presentation.http.controllers.oauth2-ctrl/callback}}]]
             ["/"
              ["" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/listing}}]
-             ["cljs" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/cljs}}]
+             ["spa" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/spa}}]
              ["sync/:task-id" {:post {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/sync}}]
              ["sync-all" {:post {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/sync-all}}]
              ["update-credentials" {:post {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/update-credentials}}]]]
@@ -33,7 +33,7 @@
   :tracky.domain/worklog-repository {:impl #ig/ref :tracky.infrastructure.http/tempo}
 
   :tracky.presentation.http.controllers.user-ctrl/listing {}
-  :tracky.presentation.http.controllers.user-ctrl/cljs {}
+  :tracky.presentation.http.controllers.user-ctrl/spa {}
   :tracky.presentation.http.controllers.user-ctrl/sync {}
   :tracky.presentation.http.controllers.user-ctrl/sync-all {}
   :tracky.presentation.http.controllers.user-ctrl/update-credentials {}

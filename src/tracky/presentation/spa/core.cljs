@@ -1,4 +1,4 @@
-(ns tracky.presentation.cljs.app
+(ns tracky.presentation.spa.core
   (:require [reagent.core :as r]
             [reagent.dom  :as dom]))
 

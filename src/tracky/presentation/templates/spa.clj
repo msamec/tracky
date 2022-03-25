@@ -1,4 +1,4 @@
-(ns tracky.presentation.templates.cljs
+(ns tracky.presentation.templates.spa
   (:require [hiccup.page :refer [html5 include-js]]))
 
 (defn render

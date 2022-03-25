@@ -1,6 +1,6 @@
 (ns tracky.presentation.http.controllers.user-ctrl
   (:require [tracky.presentation.templates.index :as index]
-            [tracky.presentation.templates.cljs :as cljs]
+            [tracky.presentation.templates.spa :as spa]
             [integrant.core :as ig]
             [ring.util.response :refer [redirect]]
             [tracky.application.fetch-entries :as fetch-entries]
@@ -23,10 +23,10 @@
        (index/render credential)
        response))))
 
-(defmethod ig/init-key :tracky.presentation.http.controllers.user-ctrl/cljs [_ _]
+(defmethod ig/init-key :tracky.presentation.http.controllers.user-ctrl/spa [_ _]
   (fn [_request]
     (->
-     (cljs/render)
+     (spa/render)
      (response))))
 
 (defmethod ig/init-key :tracky.presentation.http.controllers.user-ctrl/sync [_ _]
