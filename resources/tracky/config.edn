@@ -5,21 +5,13 @@
   {:router #ig/ref :duct.router/reitit}
 
   :duct.router/reitit
-  {:routes [["/auth"
-             ["/login" {:get {:handler #ig/ref :tracky.presentation.http.controllers.oauth2-ctrl/login}}]
-             ["/oauth2" {:get {:handler #ig/ref :tracky.presentation.http.controllers.oauth2-ctrl/authorize}}]
-             ["/oauth2/callback" {:get {:handler #ig/ref :tracky.presentation.http.controllers.oauth2-ctrl/callback}}]]
-            ["/"
-             ["" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/listing}}]
-             ["spa" {:get {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/spa}}]
-             ["sync/:task-id" {:post {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/sync}}]
-             ["sync-all" {:post {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/sync-all}}]
-             ["update-credentials" {:post {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/update-credentials}}]]
+  {:routes [["/oauth2/callback" {:get {:handler #ig/ref :tracky.presentation.http.controllers.frontend.oauth2-ctrl/callback}}]
+            ["/" {:get {:handler #ig/ref :tracky.presentation.http.controllers.frontend.main-ctrl/index}}]
             ["/api"
              ["/entries"
-              ["/list" {:get {:handler #ig/ref :tracky.presentation.http.controllers.entries-ctrl/list}}]
-              ["/sync/:id" {:post {:handler #ig/ref :tracky.presentation.http.controllers.entries-ctrl/sync}}]
-              ["/sync-all" {:post {:handler #ig/ref :tracky.presentation.http.controllers.entries-ctrl/sync-all}}]]]]
+              ["/list" {:get {:handler #ig/ref :tracky.presentation.http.controllers.api.entries-ctrl/list}}]
+              ["/sync/:id" {:post {:handler #ig/ref :tracky.presentation.http.controllers.api.entries-ctrl/sync}}]
+              ["/sync-all" {:post {:handler #ig/ref :tracky.presentation.http.controllers.api.entries-ctrl/sync-all}}]]]]
    :reitit.ring/opts {:data #ig/ref :tracky.infrastructure.reitit/opts}
    :reitit.ring/deafult-handlers {}}
 
@@ -28,29 +20,20 @@
 
   :tracky.infrastructure.middlewares/authorization {}
 
-  :tracky.infrastructure.database/credential {:db-uri #duct/env ["DB_URI" Str]}
-  :tracky.domain/credential-repository {:impl #ig/ref :tracky.infrastructure.database/credential}
-
   :tracky.infrastructure.http/toggl {}
   :tracky.domain/entry-repository {:impl #ig/ref :tracky.infrastructure.http/toggl}
 
   :tracky.infrastructure.http/tempo {}
   :tracky.domain/worklog-repository {:impl #ig/ref :tracky.infrastructure.http/tempo}
 
-  :tracky.presentation.http.controllers.entries-ctrl/list {}
-  :tracky.presentation.http.controllers.entries-ctrl/sync {}
-  :tracky.presentation.http.controllers.entries-ctrl/sync-all {}
+  :tracky.presentation.http.controllers.api.entries-ctrl/list {}
+  :tracky.presentation.http.controllers.api.entries-ctrl/sync {}
+  :tracky.presentation.http.controllers.api.entries-ctrl/sync-all {}
 
-  :tracky.presentation.http.controllers.user-ctrl/listing {}
-  :tracky.presentation.http.controllers.user-ctrl/spa {}
-  :tracky.presentation.http.controllers.user-ctrl/sync {}
-  :tracky.presentation.http.controllers.user-ctrl/sync-all {}
-  :tracky.presentation.http.controllers.user-ctrl/update-credentials {}
+  :tracky.presentation.http.controllers.frontend.main-ctrl/index {}
 
-  :tracky.presentation.http.controllers.oauth2-ctrl/login {}
-  :tracky.presentation.http.controllers.oauth2-ctrl/authorize {:config #ig/ref :tracky.presentation.http.controllers.oauth2-ctrl/config}
-  :tracky.presentation.http.controllers.oauth2-ctrl/callback {:config #ig/ref :tracky.presentation.http.controllers.oauth2-ctrl/config}
-  :tracky.presentation.http.controllers.oauth2-ctrl/config
+  :tracky.presentation.http.controllers.frontend.oauth2-ctrl/callback {:config #ig/ref :tracky.presentation.http.controllers.frontend.oauth2-ctrl/config}
+  :tracky.presentation.http.controllers.frontend.oauth2-ctrl/config
   {:authorize-uri "https://accounts.google.com/o/oauth2/v2/auth"
    :access-token-uri "https://oauth2.googleapis.com/token"
    :client-id #duct/env ["GOOGLE_CLIENT_ID" Str]
@@ -58,18 +41,6 @@
    :scopes ["openid"]
    :redirect-uri "/auth/oauth2/callback"
    :landing-uri "/"}
-
-  :duct.middleware.web/defaults {:session {:flash true, :cookie-attrs {:http-only true, :same-site :lax}}}
-
-  :duct.migrator.ragtime/resources
-  {:path "tracky/migrations"}
-
-  :duct.migrator/ragtime
-  {:database   #ig/ref :duct.database/sql
-   :logger     #ig/ref :duct/logger
-   :strategy   :raise-error
-   :migrations #ig/ref :duct.migrator.ragtime/resources
-   :migrations-table "migrations"}
 
   :magnet.buddy-auth/jwt-oidc
   {:claims {:iss #duct/env ["ISSUER_URL" Str]
@@ -87,5 +58,4 @@
  :duct.profile/prod  {}
 
  :duct.module/logging {}
- :duct.module.web/site {}
- :duct.module/sql {}}
+ :duct.module.web/site {}}

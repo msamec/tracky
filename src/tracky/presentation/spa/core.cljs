@@ -4,7 +4,7 @@
             [reitit.frontend :as rf]
             [reitit.frontend.easy :as rfe]
             [reitit.frontend.controllers :as rfc]
-            [tracky.presentation.spa.listing :refer [Listing]]))
+            [tracky.presentation.spa.entries :refer [Entries]]))
 
 (defonce match (r/atom nil))
 
@@ -12,8 +12,8 @@
   (rf/router
    ["/"
     [""
-     {:name ::listing
-      :view Listing}]]))
+     {:name ::entries
+      :view Entries}]]))
 
 (defn init! []
   (rfe/start!
@@ -23,6 +23,6 @@
                     (when new-match
                       (assoc new-match :controllers (rfc/apply-controllers (:controllers old-match) new-match))))))
    {:use-fragment true})
-  (dom/render [Listing] (js/document.getElementById "app")))
+  (dom/render [Entries] (js/document.getElementById "app")))
 
 (init!)

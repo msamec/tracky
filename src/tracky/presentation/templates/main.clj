@@ -1,8 +1,8 @@
-(ns tracky.presentation.templates.spa
+(ns tracky.presentation.templates.main
   (:require [hiccup.page :refer [html5 include-js]]
             [ring.middleware.anti-forgery :as anti-forgery]))
 
-(defn render
+(defn index
   []
   (html5
    [:head

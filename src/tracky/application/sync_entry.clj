@@ -5,5 +5,5 @@
 (defn execute! [task-id credential]
   (let [entry (entry-repository/one! task-id credential)]
     (when (true? (:syncable entry))
-      ;(worklog-repository/save! entry credential)
+      (worklog-repository/save! entry credential)
       (entry-repository/add-tags! (list task-id) credential))))

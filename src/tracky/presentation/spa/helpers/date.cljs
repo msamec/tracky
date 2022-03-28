@@ -1,4 +1,4 @@
-(ns tracky.presentation.spa.date
+(ns tracky.presentation.spa.helpers.date
   (:require [clojure.string :as str]))
 
 (def seconds-in-minute 60)
