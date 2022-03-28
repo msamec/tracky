@@ -25,11 +25,17 @@
           tempo-api-key (get headers "x-tempo-api-key")
           jira-account-id (get headers "x-jira-account-id")]
       (sync-entry/execute! id {:toggl-api-key toggl-api-key
-                                    :tempo-api-key tempo-api-key
-                                    :jira-account-id jira-account-id})
+                               :tempo-api-key tempo-api-key
+                               :jira-account-id jira-account-id})
       (response nil))))
 
 (defmethod ig/init-key :tracky.presentation.http.controllers.entries-ctrl/sync-all [_ _]
-  (fn [{:keys [] {:keys [user-id]} :session}]
-    (sync-all-entries/execute! user-id)
-    (response nil)))
+  (fn [{:keys [headers] :as request}]
+    (let [{:keys [] {:keys [id]} :path-params} request
+          toggl-api-key (get headers "x-toggl-api-key")
+          tempo-api-key (get headers "x-tempo-api-key")
+          jira-account-id (get headers "x-jira-account-id")]
+      (sync-all-entries/execute! {:toggl-api-key toggl-api-key
+                                   :tempo-api-key tempo-api-key
+                                   :jira-account-id jira-account-id})
+      (response nil))))

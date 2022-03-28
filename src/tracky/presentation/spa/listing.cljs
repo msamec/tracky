@@ -42,7 +42,8 @@
 
 (defn sync-all []
   (->
-   (fetch/post "/api/entries/sync-all" (options))))
+   (fetch/post "/api/entries/sync-all" (options))
+   (.then #(fetch-entries))))
 
 (defn up-to-date []
   [:div
@@ -69,7 +70,9 @@
     [th "Start date"]
     [th "Syncable"]
     [th [:button
-         {:class "bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded"}
+         {:class "bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded"
+          :on-click (fn [_e]
+                      (sync-all))}
          "Sync all"]]]])
 
 (defn td [content]
