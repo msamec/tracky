@@ -21,8 +21,8 @@
 
 (defn save! [entry credential]
   (let [url "https://api.tempo.io/core/3/worklogs"
-        api-key (get-in credential [:options :tempo-key])
-        jira-account-id (get-in credential [:options :jira-account-id])]
+        api-key (get-in credential [:tempo-api-key])
+        jira-account-id (get-in credential [:jira-account-id])]
     (->
      entry
      (prepare-entry jira-account-id)

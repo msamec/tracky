@@ -17,7 +17,9 @@
              ["update-credentials" {:post {:handler #ig/ref :tracky.presentation.http.controllers.user-ctrl/update-credentials}}]]
             ["/api"
              ["/entries"
-              ["/list" {:get {:handler #ig/ref :tracky.presentation.http.controllers.entries-ctrl/list}}]]]]
+              ["/list" {:get {:handler #ig/ref :tracky.presentation.http.controllers.entries-ctrl/list}}]
+              ["/sync/:id" {:post {:handler #ig/ref :tracky.presentation.http.controllers.entries-ctrl/sync}}]
+              ["/sync-all" {:post {:handler #ig/ref :tracky.presentation.http.controllers.entries-ctrl/sync-all}}]]]]
    :reitit.ring/opts {:data #ig/ref :tracky.infrastructure.reitit/opts}
    :reitit.ring/deafult-handlers {}}
 
@@ -36,6 +38,8 @@
   :tracky.domain/worklog-repository {:impl #ig/ref :tracky.infrastructure.http/tempo}
 
   :tracky.presentation.http.controllers.entries-ctrl/list {}
+  :tracky.presentation.http.controllers.entries-ctrl/sync {}
+  :tracky.presentation.http.controllers.entries-ctrl/sync-all {}
 
   :tracky.presentation.http.controllers.user-ctrl/listing {}
   :tracky.presentation.http.controllers.user-ctrl/spa {}

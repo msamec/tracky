@@ -8,15 +8,6 @@
 
 (defonce match (r/atom nil))
 
-(comment
-  (defn current-page []
-    [:div
-     [:ul
-      [:li [:a {:href (rfe/href ::listing)} "Listing"]]]
-     (when @match
-       (let [view (:view (:data @match))]
-         [view @match]))]))
-
 (def routes
   (rf/router
    ["/"
