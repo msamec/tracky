@@ -6,7 +6,8 @@
   (html5
    [:head
     [:title "Tracky"]
-    [:body
-     [:h1 "Hello World"]
-     [:div {:id "app"}]
-     (include-js "/app/js/main.js")]]))
+    (include-js "https://cdn.tailwindcss.com")]
+   [:body
+    {:class "relative antialiased bg-gray-100"}
+    [:div {:id "app"}]
+    (include-js "/app/js/main.js")]))

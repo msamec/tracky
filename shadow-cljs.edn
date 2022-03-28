@@ -2,7 +2,9 @@
  ["src"]
 
  :dependencies
- [[reagent "1.1.0"]]
+ [[reagent "1.1.0"]
+  [metosin/reitit-frontend "0.5.17"]
+  [lambdaisland/fetch "1.0.41"]]
 
  :builds
  {:app
@@ -10,4 +12,4 @@
    :output-dir "resources/tracky/public/app/js"
    :asset-path "/app/js"
    :modules {:main
-             {:init-fn tracky.presentation.spa.core/init}}}}}
+             {:entries [tracky.presentation.spa.core]}}}}}
