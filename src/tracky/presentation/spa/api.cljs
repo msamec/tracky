@@ -1,6 +1,7 @@
 (ns tracky.presentation.spa.api
   (:require [lambdaisland.fetch :as fetch]
-            [hodgepodge.core :refer [local-storage]]))
+            [hodgepodge.core :refer [local-storage]]
+            [tracky.presentation.spa.components.oauth2 :refer [logout]]))
 
 (defn meta-value [name]
   (.. js/document
@@ -22,23 +23,32 @@
      :content-type :json}
     additional)))
 
+(defmulti handle-response (fn [{:keys [status]}] status))
+(defmethod handle-response 200
+  [response]
+  (-> response :body (js->clj :keywordize-keys true)))
+(defmethod handle-response 401
+  [_response]
+  (logout)
+  (throw (js/Error. "Unauthorized")))
+(defmethod handle-response :default
+  [_response]
+  (throw (js/Error. "Error"))) ;TODO: improve error handling
+
 (defn fetch-entries [entries]
   (->
    (fetch/get "/api/entries/list" (options))
-   (.then #(-> % :body (js->clj :keywordize-keys true) :data))
-   (.then #(reset! entries %))))
+   (.then #(handle-response %))
+   (.then #(reset! entries (:data %)))))
 
 (defn sync [id]
   (->
-   (fetch/post (str "/api/entries/sync/" id) (options))))
+   (fetch/post (str "/api/entries/sync/" id) (options))
+   (.then #(handle-response %))))
 
 (defn sync-all []
   (->
-   (fetch/post "/api/entries/sync-all" (options))))
+   (fetch/post "/api/entries/sync-all" (options))
+   (.then #(handle-response %))))
 
-(defn get-token [code authenticated]
-  (->
-   (fetch/get "/auth-code" (options {:query-params {:code code}}))
-   (.then #(-> % :body (js->clj :keywordize-keys true) :access-token))
-   (.then #(assoc! local-storage :access-token %))
-   (.then #(reset! authenticated true))))
+

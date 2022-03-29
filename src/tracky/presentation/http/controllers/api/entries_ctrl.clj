@@ -27,7 +27,7 @@
       (sync-entry/execute! id {:toggl-api-key toggl-api-key
                                :tempo-api-key tempo-api-key
                                :jira-account-id jira-account-id})
-      (response nil))))
+      (response (json/write-str {})))))
 
 (defmethod ig/init-key :tracky.presentation.http.controllers.api.entries-ctrl/sync-all [_ _]
   (fn [{:keys [headers]}]
@@ -37,4 +37,4 @@
       (sync-all-entries/execute! {:toggl-api-key toggl-api-key
                                   :tempo-api-key tempo-api-key
                                   :jira-account-id jira-account-id})
-      (response nil))))
+      (response (json/write-str {})))))

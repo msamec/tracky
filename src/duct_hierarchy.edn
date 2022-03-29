@@ -1,3 +1,2 @@
-{:tracky.domain/credential-repository [:duct/daemon]
- :tracky.domain/entry-repository [:duct/daemon]
+{:tracky.domain/entry-repository [:duct/daemon]
  :tracky.domain/worklog-repository [:duct/daemon]}

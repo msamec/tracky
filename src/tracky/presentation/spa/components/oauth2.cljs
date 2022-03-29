@@ -1,15 +1,19 @@
 (ns tracky.presentation.spa.components.oauth2
   (:require ["react-simple-oauth2-login$default" :as OAuth2Login]
-            [tracky.presentation.spa.api :refer [get-token]]
             [hodgepodge.core :refer [local-storage]]
-            [reagent.core :as r]))
+            [reagent.core :as r]
+            [lambdaisland.fetch :as fetch]))
 
-(defonce authenticated (r/atom
-                        (if (nil? (:access-token local-storage))
-                          false
-                          true)))
+(def authenticated (r/atom (:access-token local-storage)))
 
 (def url (.. js/window -location -origin))
+
+(defn get-token [code authenticated]
+  (->
+   (fetch/get "/auth-code" {:query-params {:code code}})
+   (.then #(-> % :body (js->clj :keywordize-keys true) :access-token))
+   (.then #(assoc! local-storage :access-token %))
+   (.then #(reset! authenticated true))))
 
 (defn onSuccess [response] (->
                             response
@@ -28,3 +32,4 @@
                    :onFailure onFailure
                    :scope "openid"}])
 
+(defn logout [] (reset! authenticated nil))

@@ -1,14 +1,6 @@
 (ns tracky.infrastructure.oauth2
-  (:require [ring.util.request :as req]
-            [clj-time.core :as time]
-            [clj-http.client :as http]
-            [ring.util.response :as resp]))
-
-(defn- redirect-uri [config request]
-  (-> (req/request-url request)
-      (java.net.URI/create)
-      (.resolve (:redirect-uri config))
-      str))
+  (:require [clj-time.core :as time]
+            [clj-http.client :as http]))
 
 (defn- get-authorization-code [request]
   (get-in request [:query-params "code"]))
@@ -30,44 +22,13 @@
               id_token (assoc :id-token id_token))))
 
 (defn get-access-token
-  [{:keys [access-token-uri client-id client-secret] :as config} request]
+  [{:keys [access-token-uri client-id client-secret redirect-uri]} request]
   (format-access-token
    (http/post access-token-uri
               {:accept :json :as  :json,
                :form-params {:grant_type    "authorization_code"
                              :code          (get-authorization-code request)
-                             :redirect_uri  (redirect-uri config request)
+                             :redirect_uri  redirect-uri
                              :client_id     client-id
                              :client_secret client-secret}
                :throw-exceptions false})))
-
-(defn- state-mismatch [_]
-  {:status 400
-   :headers {"Content-type" "text/html"}
-   :body "State mismatch"})
-
-(defn- no-auth-code [_]
-  {:status 400
-   :headers {"Content-type" "text/html"}
-   :body "No authorization code"})
-
-(defn- state-matches? [request]
-  (= (get-in request [:session ::state])
-     (get-in request [:query-params "state"])))
-
-(defn callback-handler [{:keys [session] :or {session {}} :as request} {:keys [landing-uri] :as config}]
-  (cond
-    (not (state-matches? request))
-    (state-mismatch request)
-
-    (nil? (get-authorization-code request))
-    (no-auth-code request)
-
-    :else
-    (let [access-token (get-access-token config request)
-          token (:id-token access-token)]
-      (->
-       (resp/redirect landing-uri)
-       (assoc :session (-> session
-                           (assoc-in [:oauth2] token)
-                           (dissoc ::state)))))))

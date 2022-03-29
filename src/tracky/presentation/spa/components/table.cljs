@@ -6,7 +6,7 @@
 
 (defonce entries (r/atom []))
 
-(fetch-entries entries)
+(defn refresh [] (fetch-entries entries))
 
 (defn up-to-date []
   [:div
@@ -37,7 +37,7 @@
           :on-click (fn [_e]
                       (->
                        (sync-all)
-                       (.then #(fetch-entries entries))))}
+                       (.then #(refresh))))}
          "Sync all"]]]])
 
 (defn td [content]
@@ -64,7 +64,7 @@
                           (let [id (-> e .-target .-value)]
                             (->
                              (sync id)
-                             (.then #(fetch-entries entries)))))}
+                             (.then #(refresh)))))}
              "Sync"]]]))])
 
 (defn Table []

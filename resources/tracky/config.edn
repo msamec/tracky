@@ -35,7 +35,7 @@
   :tracky.presentation.http.controllers.frontend.oauth2-ctrl/auth-code {:access-token-uri "https://oauth2.googleapis.com/token"
                                                                         :client-id #duct/env ["GOOGLE_CLIENT_ID" Str]
                                                                         :client-secret #duct/env ["GOOGLE_CLIENT_SECRET" Str]
-                                                                        :redirect-uri "/"}
+                                                                        :redirect-uri #duct/env ["REDIRECT_URI" Str]}
 
   :magnet.buddy-auth/jwt-oidc
   {:claims {:iss #duct/env ["ISSUER_URL" Str]
