@@ -29,7 +29,7 @@
               refresh_token (assoc :refresh-token refresh_token)
               id_token (assoc :id-token id_token))))
 
-(defn- get-access-token
+(defn get-access-token
   [{:keys [access-token-uri client-id client-secret] :as config} request]
   (format-access-token
    (http/post access-token-uri
@@ -38,7 +38,8 @@
                              :code          (get-authorization-code request)
                              :redirect_uri  (redirect-uri config request)
                              :client_id     client-id
-                             :client_secret client-secret}})))
+                             :client_secret client-secret}
+               :throw-exceptions false})))
 
 (defn- state-mismatch [_]
   {:status 400

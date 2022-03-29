@@ -5,8 +5,8 @@
   {:router #ig/ref :duct.router/reitit}
 
   :duct.router/reitit
-  {:routes [["/oauth2/callback" {:get {:handler #ig/ref :tracky.presentation.http.controllers.frontend.oauth2-ctrl/callback}}]
-            ["/" {:get {:handler #ig/ref :tracky.presentation.http.controllers.frontend.main-ctrl/index}}]
+  {:routes [["/" {:get {:handler #ig/ref :tracky.presentation.http.controllers.frontend.main-ctrl/index}}]
+            ["/auth-code" {:get {:handler #ig/ref :tracky.presentation.http.controllers.frontend.oauth2-ctrl/auth-code}}]
             ["/api"
              ["/entries"
               ["/list" {:get {:handler #ig/ref :tracky.presentation.http.controllers.api.entries-ctrl/list}}]
@@ -32,15 +32,10 @@
 
   :tracky.presentation.http.controllers.frontend.main-ctrl/index {}
 
-  :tracky.presentation.http.controllers.frontend.oauth2-ctrl/callback {:config #ig/ref :tracky.presentation.http.controllers.frontend.oauth2-ctrl/config}
-  :tracky.presentation.http.controllers.frontend.oauth2-ctrl/config
-  {:authorize-uri "https://accounts.google.com/o/oauth2/v2/auth"
-   :access-token-uri "https://oauth2.googleapis.com/token"
-   :client-id #duct/env ["GOOGLE_CLIENT_ID" Str]
-   :client-secret #duct/env ["GOOGLE_CLIENT_SECRET" Str]
-   :scopes ["openid"]
-   :redirect-uri "/auth/oauth2/callback"
-   :landing-uri "/"}
+  :tracky.presentation.http.controllers.frontend.oauth2-ctrl/auth-code {:access-token-uri "https://oauth2.googleapis.com/token"
+                                                                        :client-id #duct/env ["GOOGLE_CLIENT_ID" Str]
+                                                                        :client-secret #duct/env ["GOOGLE_CLIENT_SECRET" Str]
+                                                                        :redirect-uri "/"}
 
   :magnet.buddy-auth/jwt-oidc
   {:claims {:iss #duct/env ["ISSUER_URL" Str]

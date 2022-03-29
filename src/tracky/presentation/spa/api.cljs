@@ -16,7 +16,8 @@
      {:x-toggl-api-key (:toggl-key local-storage)
       :x-tempo-api-key (:tempo-key local-storage)
       :x-jira-account-id (:jira-account-id local-storage)
-      :x-csrf-token (meta-value "csrf-token")}
+      :x-csrf-token (meta-value "csrf-token")
+      :authorization (str "Bearer " (:access-token local-storage))}
      :accept :json
      :content-type :json}
     additional)))
@@ -35,3 +36,9 @@
   (->
    (fetch/post "/api/entries/sync-all" (options))))
 
+(defn get-token [code authenticated]
+  (->
+   (fetch/get "/auth-code" (options {:query-params {:code code}}))
+   (.then #(-> % :body (js->clj :keywordize-keys true) :access-token))
+   (.then #(assoc! local-storage :access-token %))
+   (.then #(reset! authenticated true))))

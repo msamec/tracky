@@ -6,8 +6,6 @@
 
 (defonce entries (r/atom []))
 
-(fetch-entries entries)
-
 (defn up-to-date []
   [:div
    {:class "container mx-auto"}
@@ -68,6 +66,7 @@
              "Sync"]]]))])
 
 (defn Table []
+  (fetch-entries entries)
   [:div
    {:class "overflow-x-auto sm:-mx-6 lg:-mx-8"}
    [:div
