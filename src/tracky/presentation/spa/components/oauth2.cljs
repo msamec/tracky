@@ -4,10 +4,10 @@
             [hodgepodge.core :refer [local-storage]]
             [reagent.core :as r]))
 
-(defonce authenticated (r/atom 
-                         (if (nil? (:access-token local-storage))
-                           false
-                           true)))
+(defonce authenticated (r/atom
+                        (if (nil? (:access-token local-storage))
+                          false
+                          true)))
 
 (def url (.. js/window -location -origin))
 
