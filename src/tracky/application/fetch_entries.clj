@@ -1,7 +1,6 @@
 (ns tracky.application.fetch-entries
-  (:require [tracky.domain.entry-repository :as entry-repository]
-            [tracky.domain.credential-repository :as credential-repository]))
+  (:require [tracky.domain.entry-repository :as entry-repository]))
 
-(defn execute! [user-id]
-  (let [credential (credential-repository/fetch! user-id)]
-    (entry-repository/all! credential)))
+(defn execute! [credential]
+  (entry-repository/all! credential))
+

@@ -1,7 +1,7 @@
 (ns tracky.infrastructure.middlewares.authorization
   (:require [integrant.core :as ig]
             [buddy.auth.accessrules :refer [wrap-access-rules success error]]
-            [ring.util.response :as resp]))
+            [clojure.data.json :as json]))
 
 (defn authenticated-access
   [request]
@@ -9,12 +9,14 @@
     (success)
     (error)))
 
-(def rules [{:pattern #"^(?!\/auth).*$"
+(def rules [{:pattern #"^/api.*$"
              :handler authenticated-access}])
 
 (defn on-error
   [_request _value]
-  (resp/redirect "/auth/login"))
+  {:status  401
+   :headers {"Content-type" "application/json"}
+   :body    (json/write-str {:error :unauthorized})})
 
 (defmethod ig/init-key :tracky.infrastructure.middlewares/authorization [_ _]
   (fn [handler]

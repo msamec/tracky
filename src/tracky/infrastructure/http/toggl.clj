@@ -45,7 +45,7 @@
 
 (defn all! [credential]
   (let [url "https://api.track.toggl.com/api/v8/time_entries"
-        api-key (get-in credential [:options :toggl-key])]
+        api-key (get-in credential [:toggl-api-key])]
     (->
      url
      (get-response api-key)
@@ -53,7 +53,7 @@
 
 (defn one! [id credential]
   (let [url (str "https://api.track.toggl.com/api/v8/time_entries/" id)
-        api-key (get-in credential [:options :toggl-key])]
+        api-key (get-in credential [:toggl-api-key])]
     (->
      url
      (get-response api-key)
@@ -62,7 +62,7 @@
 
 (defn add-tags! [ids credential]
   (let [url (str "https://api.track.toggl.com/api/v8/time_entries/" (str/join "," ids))
-        api-key (get-in credential [:options :toggl-key])]
+        api-key (get-in credential [:toggl-api-key])]
     (->
      {:time_entry {:tags ["synced"]
                    :tag_action "add"}}

@@ -1,8 +1,5 @@
 (ns tracky.infrastructure.oauth2
-  (:require [ring.util.codec :as codec]
-            [clojure.string :as str]
-            [ring.util.request :as req]
-            [crypto.random :as random]
+  (:require [ring.util.request :as req]
             [clj-time.core :as time]
             [clj-http.client :as http]
             [ring.util.response :as resp]))
@@ -12,28 +9,6 @@
       (java.net.URI/create)
       (.resolve (:redirect-uri config))
       str))
-
-(defn- scopes [config]
-  (str/join " " (map name (:scopes config))))
-
-(defn- random-state []
-  (-> (random/base64 9) (str/replace "+" "-") (str/replace "/" "_")))
-
-(defn- authorize-uri [config request state]
-  (str (:authorize-uri config)
-       (if (.contains ^String (:authorize-uri config) "?") "&" "?")
-       (codec/form-encode {:response_type "code"
-                           :client_id     (:client-id config)
-                           :redirect_uri  (redirect-uri config request)
-                           :scope         (scopes config)
-                           :state         state})))
-
-(defn authorize-handler [{:keys [session] :or {session {}} :as request} config]
-  (let [state (random-state)]
-    (->
-     (authorize-uri config request state)
-     (resp/redirect)
-     (assoc :session (assoc session ::state state)))))
 
 (defn- get-authorization-code [request]
   (get-in request [:query-params "code"]))
@@ -54,7 +29,7 @@
               refresh_token (assoc :refresh-token refresh_token)
               id_token (assoc :id-token id_token))))
 
-(defn- get-access-token
+(defn get-access-token
   [{:keys [access-token-uri client-id client-secret] :as config} request]
   (format-access-token
    (http/post access-token-uri
@@ -63,7 +38,8 @@
                              :code          (get-authorization-code request)
                              :redirect_uri  (redirect-uri config request)
                              :client_id     client-id
-                             :client_secret client-secret}})))
+                             :client_secret client-secret}
+               :throw-exceptions false})))
 
 (defn- state-mismatch [_]
   {:status 400
