@@ -24,12 +24,15 @@
 (defn onFailure [response] (.error js/console response))
 
 (defn OAuth2 []
-  [:> OAuth2Login {:authorizationUrl "https://accounts.google.com/o/oauth2/v2/auth"
-                   :responseType "code"
-                   :clientId "645484976867-vb1qfocg5aaf9pkmo5750hqlkp92kvmf.apps.googleusercontent.com"
-                   :redirectUri (str url "/")
-                   :onSuccess onSuccess
-                   :onFailure onFailure
-                   :scope "openid"}])
+  [:div
+   {:class "mx-w-6xl mx-auto py-4"}
+   [:> OAuth2Login {:authorizationUrl "https://accounts.google.com/o/oauth2/v2/auth"
+                    :responseType "code"
+                    :clientId "645484976867-vb1qfocg5aaf9pkmo5750hqlkp92kvmf.apps.googleusercontent.com"
+                    :redirectUri (str url "/")
+                    :onSuccess onSuccess
+                    :onFailure onFailure
+                    :scope "openid"
+                    :className "bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded"}]])
 
 (defn logout [] (reset! authenticated nil))
