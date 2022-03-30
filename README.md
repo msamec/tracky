@@ -15,7 +15,7 @@ Convert Toggl entries into Tempo worklogs. Using toggl api key fetch all entires
 
 ### Secrets
 
-Create `.envrd` file in root folder with following keys (insert valid values)
+Create `.envrc` file in root folder with following keys (insert valid values)
 
 ```
 export GOOGLE_CLIENT_ID=""
