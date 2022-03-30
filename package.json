@@ -8,6 +8,7 @@
   "dependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-loading-overlay-ts": "^1.0.5",
     "react-simple-oauth2-login": "^0.5.3"
   }
 }
