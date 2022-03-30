@@ -1,8 +1,8 @@
 (ns tracky.presentation.spa.api
   (:require [lambdaisland.fetch :as fetch]
             [hodgepodge.core :refer [local-storage]]
-            [tracky.presentation.spa.components.oauth2 :refer [logout]]))
-
+            [tracky.presentation.spa.components.oauth2 :refer [logout]]
+            [tracky.presentation.spa.components.loading :refer [loading-on loading-off]]))
 (defn meta-value [name]
   (.. js/document
       (querySelector (str "meta[name='" name "']"))
@@ -42,13 +42,17 @@
    (.then #(reset! entries (:data %)))))
 
 (defn sync [id]
+  (loading-on)
   (->
    (fetch/post (str "/api/entries/sync/" id) (options))
-   (.then #(handle-response %))))
+   (.then #(handle-response %))
+   (.finally #(loading-off))))
 
 (defn sync-all []
+  (loading-on)
   (->
    (fetch/post "/api/entries/sync-all" (options))
-   (.then #(handle-response %))))
+   (.then #(handle-response %))
+   (.finally #(loading-off))))
 
 
