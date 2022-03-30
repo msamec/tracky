@@ -3,7 +3,7 @@
 
 Convert Toggl entries into Tempo worklogs. Using toggl api key fetch all entires (last 9 days) that do not have `synced` tag. Task description must consist of task id and decription separated by pipeline `|` character. On sync it will send request to tempo api and add time log.
 
-![image](https://user-images.githubusercontent.com/4154034/152775907-6a85c1f3-d81f-429e-8243-9f60d4b14262.png)
+![image](https://user-images.githubusercontent.com/4154034/160797310-4e013bb2-c11d-485e-bf67-abdd4c14d86e.png)
 
 
 ## Requirements
