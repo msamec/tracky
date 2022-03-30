@@ -1,70 +1,47 @@
-# tracky
 
-FIXME: description
+# Tracky
 
-## Developing
+Convert Toggl entries into Tempo worklogs. Using toggl api key fetch all entires (last 9 days) that do not have `synced` tag. Task description must consist of task id and decription separated by pipeline `|` character. On sync it will send request to tempo api and add time log.
 
-### Setup
+![image](https://user-images.githubusercontent.com/4154034/152775907-6a85c1f3-d81f-429e-8243-9f60d4b14262.png)
 
-When you first clone this repository, run:
 
-```sh
-lein duct setup
+## Requirements
+
+* [Clojure](https://clojure.org/guides/getting_started)
+* [Node](https://nodejs.org/en/)
+
+## Installation
+
+### Secrets
+
+Create `.envrd` file in root folder with following keys (insert valid values)
+
+```
+export GOOGLE_CLIENT_ID=""
+export GOOGLE_CLIENT_SECRET=""
+export ISSUER_URL="https://accounts.google.com"
+export AUDIENCE=""
+export JWKS_URI="https://www.googleapis.com/oauth2/v3/certs"
+export REDIRECT_URI="http://localhost:3000/"
 ```
 
-This will create files for local configuration, and prep your system
-for the project.
+## Usage
 
-### Environment
+### Backend
 
-To begin developing, start with a REPL.
-
-```sh
-lein repl
+```
+$ lein run
 ```
 
-Then load the development environment.
+### Frontend
 
-```clojure
-user=> (dev)
-:loaded
+```
+$ npx shadow-cljs watch app
 ```
 
-Run `go` to prep and initiate the system.
+## Running tests
 
-```clojure
-dev=> (go)
-:duct.server.http.jetty/starting-server {:port 3000}
-:initiated
 ```
-
-By default this creates a web server at <http://localhost:3000>.
-
-When you make changes to your source files, use `reset` to reload any
-modified files and reset the server.
-
-```clojure
-dev=> (reset)
-:reloading (...)
-:resumed
+bin/kaocha
 ```
-
-### Testing
-
-Testing is fastest through the REPL, as you avoid environment startup
-time.
-
-```clojure
-dev=> (test)
-...
-```
-
-But you can also run tests through Leiningen.
-
-```sh
-lein test
-```
-
-## Legal
-
-Copyright © 2022 FIXME
