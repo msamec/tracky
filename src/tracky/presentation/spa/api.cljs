@@ -1,8 +1,8 @@
 (ns tracky.presentation.spa.api
   (:require [lambdaisland.fetch :as fetch]
             [hodgepodge.core :refer [local-storage]]
-            [tracky.presentation.spa.components.oauth2 :refer [logout]]
-            [tracky.presentation.spa.components.loading :refer [loading-on loading-off]]))
+            [tracky.presentation.spa.components.loading :refer [loading-on loading-off]]
+            [tracky.presentation.spa.components.alert :refer [danger]]))
 (defn meta-value [name]
   (.. js/document
       (querySelector (str "meta[name='" name "']"))
@@ -27,13 +27,10 @@
 (defmethod handle-response 200
   [response]
   (-> response :body (js->clj :keywordize-keys true)))
-(defmethod handle-response 401
-  [_response]
-  (logout)
-  (throw (js/Error. "Unauthorized")))
 (defmethod handle-response :default
-  [_response]
-  (throw (js/Error. "Error"))) ;TODO: improve error handling
+  [response]
+  (let [body (-> response :body (js->clj :keywordize-keys true))]
+    (throw (js/Error. (:message body))))) ;TODO: improve error handling
 
 (defn fetch-entries [entries]
   (->
@@ -46,6 +43,7 @@
   (->
    (fetch/post (str "/api/entries/sync/" id) (options))
    (.then #(handle-response %))
+   (.catch #(danger (str %)))
    (.finally #(loading-off))))
 
 (defn sync-all []
