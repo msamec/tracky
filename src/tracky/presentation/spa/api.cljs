@@ -3,7 +3,8 @@
             [hodgepodge.core :refer [local-storage]]
             [tracky.presentation.spa.components.loading :refer [loading-on loading-off]]
             [tracky.presentation.spa.components.alert :refer [danger]]
-            [tracky.presentation.spa.components.oauth2 :refer [logout]]))
+            [tracky.presentation.spa.authentication :refer [logout]]))
+
 (defn meta-value [name]
   (.. js/document
       (querySelector (str "meta[name='" name "']"))
@@ -30,16 +31,23 @@
    :body
    (js->clj :keywordize-keys true)))
 
+(defn throw-error [message]
+  (danger message)
+  (throw (js/Error. message)))
+
 (defmulti handle-response (fn [{:keys [status]}] status))
+(defmethod handle-response 200
+  [response]
+  response)
 (defmethod handle-response 401
   [response]
   (let [body (extract-body response)]
     (logout)
-    (danger (:message body))
-    (throw (js/Error. (:message body)))))
+    (throw-error (:message body))))
 (defmethod handle-response :default
   [response]
-  response)
+  (let [body (extract-body response)]
+    (throw-error (:message body))))
 
 (defn fetch-entries [entries]
   (->
@@ -63,5 +71,12 @@
    (.then #(handle-response %))
    (.then #(extract-body %))
    (.finally #(loading-off))))
+
+(defn get-token [code]
+  (->
+   (fetch/get "/auth-code" (options {:query-params {:code code}}))
+   (.then #(handle-response %))
+   (.then #(extract-body %))))
+
 
 
