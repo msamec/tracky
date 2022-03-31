@@ -1,6 +1,7 @@
 (ns tracky.infrastructure.oauth2
   (:require [clj-time.core :as time]
-            [clj-http.client :as http]))
+            [clj-http.client :as http]
+            [tracky.domain.exception :as exception]))
 
 (defn- get-authorization-code [request]
   (get-in request [:query-params "code"]))
@@ -23,12 +24,17 @@
 
 (defn get-access-token
   [{:keys [access-token-uri client-id client-secret redirect-uri]} request]
-  (format-access-token
-   (http/post access-token-uri
-              {:accept :json :as  :json,
-               :form-params {:grant_type    "authorization_code"
-                             :code          (get-authorization-code request)
-                             :redirect_uri  redirect-uri
-                             :client_id     client-id
-                             :client_secret client-secret}
-               :throw-exceptions false})))
+  (try
+    (->
+     access-token-uri
+     (http/post
+      {:accept :json :as  :json,
+       :form-params {:grant_type    "authorization_code"
+                     :code          (get-authorization-code request)
+                     :redirect_uri  redirect-uri
+                     :client_id     client-id
+                     :client_secret client-secret}
+       :throw-exceptions false})
+     (format-access-token))
+    (catch Exception _e
+      (exception/service-unavailable "Issues with OAuth2"))))
