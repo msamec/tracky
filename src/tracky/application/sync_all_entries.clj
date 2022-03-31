@@ -3,7 +3,10 @@
             [tracky.domain.worklog-repository :as worklog-repository]))
 
 (defn execute! [credential]
-  (let [entries (entry-repository/all! credential)
-        entry-ids (map (fn [{:keys [id]}] id) entries)]
-    (doall (map #(worklog-repository/save! % credential) entries))
-    (entry-repository/add-tags! entry-ids credential)))
+  (let [entries (entry-repository/all! credential)]
+    (doall
+     (map
+      (fn [entry]
+        (worklog-repository/save! entry credential)
+        (entry-repository/add-tags! (list (:id entry)) credential))
+      entries))))
