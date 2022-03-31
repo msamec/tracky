@@ -1,6 +1,7 @@
 (ns tracky.presentation.spa.components.settings
   (:require [reagent.core :as r]
-            [hodgepodge.core :refer [local-storage]]))
+            [hodgepodge.core :refer [local-storage]]
+            [tracky.presentation.spa.components.alert :refer [info]]))
 
 (defonce credential (r/atom {:toggl-key (:toggl-key local-storage)
                              :tempo-key (:tempo-key local-storage)
@@ -16,13 +17,14 @@
     {:class "w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300"
      :required "required",
      :name key,
-     :value (key @credential)
+     :defaultValue (key @credential)
      :type "text"
-     :on-change (fn [e]
-                  (.preventDefault e)
-                  (let [v (-> e .-target .-value)]
-                    (assoc! local-storage key v)
-                    (swap! credential assoc key v)))}]])
+     :on-blur (fn [e]
+                (.preventDefault e)
+                (let [v (-> e .-target .-value)]
+                  (assoc! local-storage key v)
+                  (swap! credential assoc key v)
+                  (info "Successfully saved!")))}]])
 
 (defn Settings []
   [:div

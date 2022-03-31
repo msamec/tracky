@@ -2,8 +2,8 @@
 
 (defn unauthorized []
   (throw
-   (ex-info "Unauthorized" {:type ::unauthorized
-                            :status 401})))
+   (ex-info "Unauthorized access" {:type ::unauthorized
+                                   :status 401})))
 
 (defn service-unavailable [cause]
   (throw

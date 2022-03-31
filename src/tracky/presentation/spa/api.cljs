@@ -2,7 +2,8 @@
   (:require [lambdaisland.fetch :as fetch]
             [hodgepodge.core :refer [local-storage]]
             [tracky.presentation.spa.components.loading :refer [loading-on loading-off]]
-            [tracky.presentation.spa.components.alert :refer [danger]]))
+            [tracky.presentation.spa.components.alert :refer [danger]]
+            [tracky.presentation.spa.components.oauth2 :refer [logout]]))
 (defn meta-value [name]
   (.. js/document
       (querySelector (str "meta[name='" name "']"))
@@ -23,19 +24,28 @@
      :content-type :json}
     additional)))
 
+(defn extract-body [response]
+  (->
+   response
+   :body
+   (js->clj :keywordize-keys true)))
+
 (defmulti handle-response (fn [{:keys [status]}] status))
-(defmethod handle-response 200
+(defmethod handle-response 401
   [response]
-  (-> response :body (js->clj :keywordize-keys true)))
+  (let [body (extract-body response)]
+    (logout)
+    (danger (:message body))
+    (throw (js/Error. (:message body)))))
 (defmethod handle-response :default
   [response]
-  (let [body (-> response :body (js->clj :keywordize-keys true))]
-    (throw (js/Error. (:message body))))) ;TODO: improve error handling
+  response)
 
 (defn fetch-entries [entries]
   (->
    (fetch/get "/api/entries/list" (options))
    (.then #(handle-response %))
+   (.then #(extract-body %))
    (.then #(reset! entries (:data %)))))
 
 (defn sync [id]
@@ -43,7 +53,7 @@
   (->
    (fetch/post (str "/api/entries/sync/" id) (options))
    (.then #(handle-response %))
-   (.catch #(danger (str %)))
+   (.then #(extract-body %))
    (.finally #(loading-off))))
 
 (defn sync-all []
@@ -51,6 +61,7 @@
   (->
    (fetch/post "/api/entries/sync-all" (options))
    (.then #(handle-response %))
+   (.then #(extract-body %))
    (.finally #(loading-off))))
 
 
