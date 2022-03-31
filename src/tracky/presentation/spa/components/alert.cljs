@@ -5,13 +5,27 @@
 (defonce hidden (r/atom true))
 (defonce alert-type (r/atom "red"))
 (defonce message (r/atom ""))
+(defonce message-title (r/atom "Alert"))
 
 (defn hidden-class [] (if (true? @hidden) "hidden" ""))
 
-(defn danger [text]
+(defn reset [text type title]
   (reset! hidden false)
-  (reset! alert-type "red")
-  (reset! message text))
+  (reset! alert-type type)
+  (reset! message text)
+  (reset! message-title title))
+
+(defn danger [text]
+  (reset text "red" "Alert"))
+
+(defn info [text]
+  (reset text "blue" "Info"))
+
+(defn success [text]
+  (reset text "green" "Success"))
+
+(defn warning [text]
+  (reset text "yellow" "Warning"))
 
 (defn Alert []
   [:div
@@ -33,7 +47,7 @@
         :clip-rule "evenodd"}]]
      [:h3
       {:class (str "text-lg font-medium text-" @alert-type "-700 dark:text-" @alert-type "-800")}
-      "Alert"]]
+      @message-title]]
     [:div
      {:class (str "mt-2 mb-4 text-sm text-" @alert-type "-700 dark:text-" @alert-type "-800")}
      @message]

@@ -35,4 +35,6 @@
                     :scope "openid"
                     :className "bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded"}]])
 
-(defn logout [] (reset! authenticated nil))
+(defn logout []
+  (reset! authenticated nil)
+  (dissoc! local-storage :access-token))
