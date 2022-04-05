@@ -1,27 +1,21 @@
-(ns tracky.domain.service.validator)
+(ns tracky.domain.service.validator
+  (:require [clojure.spec.alpha :as s]
+            [tracky.domain.exception :as exception]))
 
-(defn make-unsyncable [entry]
-  (assoc entry :syncable false))
+(defn- extract-path-val [problems]
+  (reduce
+   (fn [aggregator data]
+     (let [{:keys [path val]} data]
+       (if-not (empty? path)
+         (conj aggregator {:property path
+                           :value val})
+         aggregator)))
+   []
+   problems))
 
-(defn task-id-is-not-nil [{:keys [task-id] :as entry}]
-  (if (nil? task-id)
-    (make-unsyncable entry)
-    entry))
-
-(defn description-is-not-nil [{:keys [description] :as entry}]
-  (if (nil? description)
-    (make-unsyncable entry)
-    entry))
-
-(defn duration-is-greater-than-1-minute [{:keys [duration] :as entry}]
-  (if (> 60 duration)
-    (make-unsyncable entry)
-    entry))
-
-(defn validate-entry [entry]
-  (->
-   entry
-   task-id-is-not-nil
-   description-is-not-nil
-   duration-is-greater-than-1-minute))
-
+(defn validate [spec x]
+  (when-not (s/valid? spec x)
+    (let [data (s/explain-data spec x)
+          problems (:clojure.spec.alpha/problems data)
+          errors (extract-path-val problems)]
+      (exception/unprocessable-entity errors))))

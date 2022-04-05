@@ -16,7 +16,10 @@
    (mapv map-values)))
 (defmethod map-values clojure.lang.PersistentHashMap
   [{:keys [id description duration start]}]
-  (create-entry (str id) description duration start))
+  (create-entry {:entry/id (str id)
+                 :entry/log description
+                 :entry/duration duration
+                 :entry/start start}))
 (defmethod map-values nil [_] '())
 
 (defmulti parse-response (fn [response] (:status response)))

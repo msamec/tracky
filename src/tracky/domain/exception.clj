@@ -1,5 +1,10 @@
 (ns tracky.domain.exception)
 
+(defn unprocessable-entity [errors]
+  (throw
+   (ex-info "Unprocessable entity" {:type ::unprocessable-entity
+                                    :status 422
+                                    :errors errors})))
 (defn unauthorized []
   (throw
    (ex-info "Unauthorized access" {:type ::unauthorized

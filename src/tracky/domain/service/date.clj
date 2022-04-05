@@ -5,6 +5,13 @@
    (java.text.SimpleDateFormat. "yyyy-MM-dd'T'HH:mm:ss")
    date))
 
+(defn is-valid-iso-8601? [date]
+  (try
+    (parse-date date)
+    true
+    (catch java.text.ParseException _e
+      false)))
+
 (defn format-date [date]
   (->>
    date

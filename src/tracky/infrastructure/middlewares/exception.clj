@@ -4,8 +4,8 @@
 
 (defn handler [exception request]
   (let [data (ex-data exception)]
-    {:status (:status data)
-     :body {:message (ex-message exception)
+    {:status (or (:status data) 400)
+     :body {:message (or (ex-message exception) "An error occurred")
             :exception (.getClass exception)
             :data data
             :uri (:uri request)}}))
@@ -16,4 +16,5 @@
     middleware/default-handlers
     {::exception/unauthorized (partial handler)
      ::exception/service-unavailable (partial handler)
-     ::middleware/default (partial handler 400 "An error occurred")})))
+     ::exception/unprocessable-entity (partial handler)
+     ::middleware/default (partial handler)})))

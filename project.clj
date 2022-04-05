@@ -38,6 +38,8 @@
                   :dependencies   [[integrant/repl "0.3.2"]
                                    [hawk "0.2.11"]
                                    [eftest "0.5.9"]
-                                   [kerodon "0.9.1"]
-                                   [lambdaisland/kaocha "1.64.1010"]]
-                  :aliases {"kaocha" ["run" "-m" "kaocha.runner"]}}})
+                                   [kerodon "0.9.1"]]}
+
+   :kaocha {:dependencies [[lambdaisland/kaocha "1.64.1010"]]}}
+  :aliases
+  {"kaocha" ["with-profile" "+kaocha" "run" "-m" "kaocha.runner"]})

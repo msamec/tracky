@@ -30,7 +30,7 @@ jobs:
           key: "m2-${{ hashFiles('project.clj') }}"
 
       - name: Run tests
-        run: bin/kaocha
+        run: lein kaocha
 
       - name: Check code format
         run: lein cljfmt check
