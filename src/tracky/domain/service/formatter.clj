@@ -7,9 +7,10 @@
     nil))
 
 (defn split-by [log]
-  (as-> log s
-    (str/split s #"\|")
-    (mapv str/trim s)))
+  (when (re-find #"\|" log)
+    (as-> log s
+      (str/split s #"\|")
+      (mapv str/trim s))))
 
 (defn format-by-pipeline-character [log]
   (let [[task-id description] (split-by log)]
@@ -20,7 +21,7 @@
 (defn format-by-square-brackets [log]
   (let [task-id (re-find (matcher log))
         description (str/replace log #"\[(.*?)\]" "")]
-    (create-data task-id description)))
+    (create-data task-id (str/trim description))))
 
 (def list-of-applicable-formatters
   [format-by-pipeline-character format-by-square-brackets])
