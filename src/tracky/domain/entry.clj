@@ -8,14 +8,15 @@
 
 (s/def :entry/id string?)
 (s/def :entry/log string?)
-(s/def :entry/duration (s/and int? #(>= % 60)))
+(s/def :entry/duration (s/and int?))
 (s/def :entry/start #(date/is-valid-iso-8601? %))
 (s/def :entry/entry (s/keys :req [:entry/id :entry/log :entry/duration :entry/start]))
 
-(defn- make-unsyncable-if-fails-checks [{:keys [task-id description] :as entry}]
+(defn- make-unsyncable-if-fails-checks [{:keys [task-id description duration] :as entry}]
   (if (or
        (nil? task-id)
-       (nil? description))
+       (nil? description)
+       (> 60 duration))
     (assoc entry :syncable false)
     entry))
 

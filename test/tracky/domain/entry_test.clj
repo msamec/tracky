@@ -23,17 +23,23 @@
                      :entry/start start}))
 
 (deftest entry
-  (testing "create entry"
+  (testing "create syncable entry"
     (testing "with format 'task-id | desc'"
       (let [entry (create-entry "id" "T123 | Desc" 100 "2022-04-01T06:32:57+00:00")]
         (is (= entry (valid-entry)))))
 
     (testing "with format '[task-id] desc"
       (let [entry (create-entry "id" "[T123] Desc" 100 "2022-04-01T06:32:57+00:00")]
-        (is (= entry (valid-entry {:original-description "[T123] Desc"})))))
+        (is (= entry (valid-entry {:original-description "[T123] Desc"}))))))
 
-    (testing "create entry with invalid format"
+  (testing "create unsyncable entry"
+
+    (testing "with invalid format"
       (let [entry (create-entry "id" "invalid desc" 100 "2022-04-01T06:32:57+00:00")]
+        (is (= false (:syncable entry)))))
+
+    (testing "with duration less than 60 seconds"
+      (let [entry (create-entry "id" "T123 | Desc" 1 "2022-04-01T06:32:57+00:00")]
         (is (= false (:syncable entry))))))
 
   (testing "entry cration fails"
@@ -58,13 +64,6 @@
         Exception
         #"Unprocessable entity"
         (create-entry "ID" "[T123] Desc" "100" "2022-04-01T06:32:57+00:00"))))
-
-    (testing "given duration is below 60"
-      (is
-       (thrown-with-msg?
-        Exception
-        #"Unprocessable entity"
-        (create-entry "ID" "[T123] Desc" 1 "2022-04-01T06:32:57+00:00"))))
 
     (testing "given start date is not iso 8601 format"
       (is
