@@ -27,6 +27,7 @@
   [:thead
    {:class "bg-white border-b"}
    [:tr
+    [th "Original description"]
     [th "Jira task id"]
     [th "Description"]
     [th "Duration"]
@@ -47,11 +48,12 @@
 
 (defn tbody []
   [:tbody
-   (for [{:keys [id task-id description duration start-date syncable]} @entries]
+   (for [{:keys [id task-id description original-description duration start-date syncable]} @entries]
      (let [bg-color (if syncable "bg-green-200" "bg-red-100")]
        [:tr
         {:key id
          :class (str/join " " ["border-b transition duration-300 ease-in-out" bg-color])}
+        [td original-description]
         [td task-id]
         [td description]
         [td (seconds->duration duration)]
