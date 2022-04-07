@@ -9,7 +9,7 @@
                      :entry/duration duration
                      :entry/start start}))
 
-(deftest tracky-domain.entry
+(deftest tracky-domain-entry
   (testing "when calling 'create-entry'"
     (testing "given log 'task-id | desc' then return valid syncable entry"
       (let [entry (create-entry {:log "T123 | Desc"})]
