@@ -38,9 +38,9 @@
                                                                         :redirect-uri #duct/env ["REDIRECT_URI" Str]}
 
   :magnet.buddy-auth/jwt-oidc
-  {:claims {:iss #duct/env ["ISSUER_URL" Str]
-            :aud #duct/env ["AUDIENCE" Str]}
-   :jwks-uri #duct/env ["JWKS_URI" Str]
+  {:claims {:iss #duct/env ["ISSUER_URL" Str :or ""]
+            :aud #duct/env ["AUDIENCE" Str :or ""]}
+   :jwks-uri #duct/env ["JWKS_URI" Str :or ""]
    :logger #ig/ref :duct/logger}
 
   :duct.middleware.buddy/authentication
