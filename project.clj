@@ -42,6 +42,7 @@
 
    :test  [:project/dev :project/test :profiles/test]
    :profiles/test {}
-   :project/test {:dependencies [[lambdaisland/kaocha "1.64.1010"]]}}
+   :project/test {:dependencies [[lambdaisland/kaocha "1.64.1010"]
+                                 [nubank/mockfn "0.7.0"]]}}
   :aliases
   {"kaocha" ["with-profile" "+test" "run" "-m" "kaocha.runner"]})
