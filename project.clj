@@ -40,6 +40,8 @@
                                    [eftest "0.5.9"]
                                    [kerodon "0.9.1"]]}
 
-   :kaocha {:dependencies [[lambdaisland/kaocha "1.64.1010"]]}}
+   :test  [:project/dev :project/test :profiles/test]
+   :profiles/test {}
+   :project/test {:dependencies [[lambdaisland/kaocha "1.64.1010"]]}}
   :aliases
-  {"kaocha" ["with-profile" "+kaocha" "run" "-m" "kaocha.runner"]})
+  {"kaocha" ["with-profile" "+test" "run" "-m" "kaocha.runner"]})

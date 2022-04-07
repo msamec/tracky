@@ -20,11 +20,11 @@
 
   :tracky.infrastructure.middlewares/authorization {}
 
-  :tracky.infrastructure.http/toggl {}
-  :tracky.domain/entry-repository {:impl #ig/ref :tracky.infrastructure.http/toggl}
+  :tracky.infrastructure.services/toggl {}
+  :tracky.domain/entry-repository {:impl #ig/ref :tracky.infrastructure.services/toggl}
 
-  :tracky.infrastructure.http/tempo {}
-  :tracky.domain/worklog-repository {:impl #ig/ref :tracky.infrastructure.http/tempo}
+  :tracky.infrastructure.services/tempo {}
+  :tracky.domain/worklog-repository {:impl #ig/ref :tracky.infrastructure.services/tempo}
 
   :tracky.presentation.http.controllers.api.entries-ctrl/list {}
   :tracky.presentation.http.controllers.api.entries-ctrl/sync {}
@@ -38,9 +38,9 @@
                                                                         :redirect-uri #duct/env ["REDIRECT_URI" Str]}
 
   :magnet.buddy-auth/jwt-oidc
-  {:claims {:iss #duct/env ["ISSUER_URL" Str]
-            :aud #duct/env ["AUDIENCE" Str]}
-   :jwks-uri #duct/env ["JWKS_URI" Str]
+  {:claims {:iss #duct/env ["ISSUER_URL" Str :or ""]
+            :aud #duct/env ["AUDIENCE" Str :or ""]}
+   :jwks-uri #duct/env ["JWKS_URI" Str :or ""]
    :logger #ig/ref :duct/logger}
 
   :duct.middleware.buddy/authentication
@@ -50,6 +50,7 @@
 
  :duct.profile/dev   #duct/include "dev"
  :duct.profile/local #duct/include "local"
+ :duct.profile/test  #duct/include "test"
  :duct.profile/prod  {}
 
  :duct.module/logging {}
