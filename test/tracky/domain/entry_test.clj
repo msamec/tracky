@@ -2,72 +2,61 @@
   (:require [clojure.test :refer [is deftest testing]]
             [tracky.domain.entry :as SUT]))
 
-(defn valid-entry
-  ([] (valid-entry {}))
-  ([overwrite]
-   (merge
-    (SUT/map->Entry
-     {:id "id"
-      :task-id "T123"
-      :description "Desc"
-      :original-description "T123 | Desc"
-      :duration 100
-      :start-date "2022-04-01"
-      :start-time "06:32:57"
-      :syncable true}) overwrite)))
-
-(defn create-entry [id log duration start]
+(defn create-entry [{id :id log :log duration :duration start :start
+                     :or {id "id" log "T123 | Desc" duration 100 start "2022-04-01T06:32:57+00:00"}}]
   (SUT/create-entry {:entry/id id
                      :entry/log log
                      :entry/duration duration
                      :entry/start start}))
 
-(deftest entry
-  (testing "create syncable entry"
-    (testing "with format 'task-id | desc'"
-      (let [entry (create-entry "id" "T123 | Desc" 100 "2022-04-01T06:32:57+00:00")]
-        (is (= entry (valid-entry)))))
+(deftest tracky-domain.entry
+  (testing "when calling 'create-entry'"
+    (testing "given log 'task-id | desc' then return valid syncable entry"
+      (let [entry (create-entry {:log "T123 | Desc"})]
+        (is (= "T123" (:task-id entry)))
+        (is (= "Desc" (:description entry)))
+        (is (= "T123 | Desc" (:original-description entry)))
+        (is (= true (:syncable entry)))))
 
-    (testing "with format '[task-id] desc"
-      (let [entry (create-entry "id" "[T123] Desc" 100 "2022-04-01T06:32:57+00:00")]
-        (is (= entry (valid-entry {:original-description "[T123] Desc"}))))))
+    (testing "given log '[task-id] desc' then return valid syncable entry"
+      (let [entry (create-entry {:log "[T123] Desc"})]
+        (is (= "T123" (:task-id entry)))
+        (is (= "Desc" (:description entry)))
+        (is (= "[T123] Desc" (:original-description entry)))
+        (is (= true (:syncable entry)))))
 
-  (testing "create unsyncable entry"
-
-    (testing "with invalid format"
-      (let [entry (create-entry "id" "invalid desc" 100 "2022-04-01T06:32:57+00:00")]
+    (testing "given invalid log then return unsyncable entry"
+      (let [entry (create-entry {:log "invalid desc"})]
         (is (= false (:syncable entry)))))
 
-    (testing "with duration less than 60 seconds"
-      (let [entry (create-entry "id" "T123 | Desc" 1 "2022-04-01T06:32:57+00:00")]
-        (is (= false (:syncable entry))))))
+    (testing "given duration less than 60 seconds then return unsyncable"
+      (let [entry (create-entry {:duration 1})]
+        (is (= false (:syncable entry)))))
 
-  (testing "entry cration fails"
-
-    (testing "given id is not string"
+    (testing "given id is not string then throw exception"
       (is
        (thrown-with-msg?
         Exception
         #"Unprocessable entity"
-        (create-entry 1 "[T123] Desc" 100 "2022-04-01T06:32:57+00:00"))))
+        (create-entry {:id 1}))))
 
-    (testing "given log is not string"
+    (testing "given log is not string then throw exception"
       (is
        (thrown-with-msg?
         Exception
         #"Unprocessable entity"
-        (create-entry "ID" 1 100 "2022-04-01T06:32:57+00:00"))))
+        (create-entry {:log 1}))))
 
-    (testing "given duration is not int"
+    (testing "given duration is not int then throw exception"
       (is
        (thrown-with-msg?
         Exception
         #"Unprocessable entity"
-        (create-entry "ID" "[T123] Desc" "100" "2022-04-01T06:32:57+00:00"))))
+        (create-entry {:duration "string"}))))
 
-    (testing "given start date is not iso 8601 format"
+    (testing "given start date is not iso 8601 format then throw exception"
       (is
        (thrown-with-msg?
         Exception
         #"Unprocessable entity"
-        (create-entry "ID" "[T123] Desc" 100 "non"))))))
+        (create-entry {:start "not-iso"}))))))
