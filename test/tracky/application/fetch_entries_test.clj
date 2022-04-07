@@ -6,7 +6,7 @@
 (use-fixtures :once (partial with-system!))
 
 (deftest tracky-application-fetch-entries
-  (testing "when calling fetch entries"
+  (testing "when calling 'execute!'"
     (testing "given there are entries then return single entry in a list"
       (let [result (SUT/execute! "list-single")
             entry (first result)]
