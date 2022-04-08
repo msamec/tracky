@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/msamec/tracky/branch/master/graph/badge.svg?token=OJOPA80H6J)](https://codecov.io/gh/msamec/tracky)
 
 # Tracky
 
