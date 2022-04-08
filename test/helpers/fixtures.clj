@@ -1,6 +1,5 @@
 (ns helpers.fixtures
   (:require [duct.core :as duct]
-            ;[app.readers :refer [readers]]
             [integrant.core :as ig]
             [clojure.java.io :as io]))
 
