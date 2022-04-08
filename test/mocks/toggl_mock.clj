@@ -31,8 +31,8 @@
   [_response]
   {:status 500})
 
-(defn all! [type]
-  (with-redefs [client/get (fn [_url _params] (parse-type type))]
+(defn all! [{:keys [toggl-api-key]}]
+  (with-redefs [client/get (fn [_url _params] (parse-type toggl-api-key))]
     (toggl/all! [])))
 
 (defn one! [_id _credential]
