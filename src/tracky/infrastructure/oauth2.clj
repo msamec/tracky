@@ -1,6 +1,6 @@
 (ns tracky.infrastructure.oauth2
   (:require [clj-time.core :as time]
-            [clj-http.client :as http]
+            [clj-http.client :as client]
             [tracky.domain.exception :as exception]))
 
 (defn- get-authorization-code [request]
@@ -27,7 +27,7 @@
   (try
     (->
      access-token-uri
-     (http/post
+     (client/post
       {:accept :json :as  :json,
        :form-params {:grant_type    "authorization_code"
                      :code          (get-authorization-code request)

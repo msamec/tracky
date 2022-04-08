@@ -3,7 +3,7 @@
             [clojure.data.json :as json]
             [tracky.domain.exception :as exception]))
 
-(defmulti handle-response (fn [response] (:status response)))
+(defmulti ^:private handle-response (fn [response] (:status response)))
 (defmethod handle-response 200
   [response]
   (->
@@ -14,12 +14,12 @@
   [_response]
   (exception/service-unavailable "Issues with API!"))
 
-(defn add-default [params]
+(defn- add-default [params]
   (merge
    {:throw-exceptions false}
    params))
 
-(defn add-body [params body]
+(defn- add-body [params body]
   (merge
    {:body (json/write-str body)}
    params))

@@ -5,26 +5,26 @@
             [tracky.domain.entry-repository :refer [EntryRepository -all! -one! -add-tags!]]
             [tracky.infrastructure.http :as http]))
 
-(defn remove-synced [data]
+(defn- remove-synced [data]
   (remove (fn [{:keys [tags]}] (some #{"synced"} tags)) data))
 
-(defn remove-with-negative-duration [data]
+(defn- remove-with-negative-duration [data]
   (filter (fn [{:keys [duration]}] (pos? duration)) data))
 
-(defn create [{:keys [id description duration start]}]
+(defn- create [{:keys [id description duration start]}]
   (create-entry {:entry/id (str id)
                  :entry/log description
                  :entry/duration duration
                  :entry/start start}))
 
-(defn map-values [data]
+(defn- map-values [data]
   (->>
    data
    remove-synced
    remove-with-negative-duration
    (map create)))
 
-(defn auth [credential]
+(defn- auth [credential]
   (let [api-key (get-in credential [:toggl-api-key])]
     {:basic-auth [api-key "api_token"]}))
 

@@ -1,4 +1,4 @@
-(ns tracky.infrastructure.middlewares.exception
+(ns tracky.infrastructure.middlewares.exception-handler
   (:require [reitit.ring.middleware.exception :as middleware]
             [tracky.domain.exception :as exception]))
 

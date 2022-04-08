@@ -7,6 +7,7 @@
     (doall
      (map
       (fn [entry]
-        (worklog-repository/save! entry credential)
-        (entry-repository/add-tags! (list (:id entry)) credential))
+        (when (true? (:syncable entry))
+          (worklog-repository/save! entry credential)
+          (entry-repository/add-tags! (list (:id entry)) credential)))
       entries))))

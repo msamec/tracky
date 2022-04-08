@@ -1,5 +1,5 @@
 (ns tracky.domain.entry
-  (:require [tracky.domain.service.formatter :as formatter]
+  (:require [tracky.domain.service.extractor :as extractor]
             [tracky.domain.service.date :as date]
             [tracky.domain.service.validator :as validator]
             [clojure.spec.alpha :as s]))
@@ -24,7 +24,7 @@
   "Creaste entry from id, log, duration, and start"
   [{:entry/keys [id log duration start] :as data}]
   (validator/validate :entry/entry data)
-  (let [{:keys [task-id description]} (formatter/extract-task-id-description log)
+  (let [{:keys [task-id description]} (extractor/extract-task-id-description log)
         start-date (date/format-date start)
         start-time (date/format-time start)]
     (->

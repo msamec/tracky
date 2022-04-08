@@ -5,24 +5,24 @@
             [tracky.infrastructure.services.toggl :as toggl]
             [clojure.data.json :as json]))
 
-(def entry-one
+(def entry-single
   {:data
    {:description "ID-134 | CLJ",
     :start "2022-03-29T06:00:00+00:00",
     :duration 27000,
-    :id 123}})
+    :id "123"}})
 
-(def entry-list
+(def entries-list
   [{:description "ID-134 | CLJ",
     :start "2022-03-29T06:00:00+00:00",
     :duration 27000,
-    :id 123}])
+    :id "123"}])
 
 (defmulti parse-type (fn [type] type))
 (defmethod parse-type "list-single"
   [_]
   {:status 200
-   :body (json/write-str entry-list)})
+   :body (json/write-str entries-list)})
 (defmethod parse-type "empty"
   [_response]
   {:status 200

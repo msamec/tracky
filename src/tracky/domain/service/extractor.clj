@@ -1,24 +1,24 @@
-(ns tracky.domain.service.formatter
+(ns tracky.domain.service.extractor
   (:require [clojure.string :as str]))
 
-(defn create-data [task-id description]
+(defn- create-data [task-id description]
   (if-not (some nil? [task-id description])
     {:task-id task-id :description description}
     nil))
 
-(defn split-by [log]
+(defn- split-by [log]
   (when (re-find #"\|" log)
     (as-> log s
       (str/split s #"\|")
       (mapv str/trim s))))
 
-(defn format-by-pipeline-character [log]
+(defn- format-by-pipeline-character [log]
   (let [[task-id description] (split-by log)]
     (create-data task-id description)))
 
 (def matcher (partial re-matcher #"(?<=\[).+?(?=\])"))
 
-(defn format-by-square-brackets [log]
+(defn- format-by-square-brackets [log]
   (let [task-id (re-find (matcher log))
         description (str/replace log #"\[(.*?)\]" "")]
     (create-data task-id (str/trim description))))
@@ -33,4 +33,4 @@
         (if-not (nil? result)
           result
           (recur (rest function-list))))
-      {:taks-id nil :description nil})))
+      {:task-id nil :description nil})))

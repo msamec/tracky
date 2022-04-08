@@ -3,4 +3,8 @@
            :test-paths ["test"]
            :ns-patterns ["-test$"]}]
   :kaocha/color? true
-  :kaocha/reporter [kaocha.report/documentation]}
+  :kaocha/reporter [kaocha.report/documentation]
+  :plugins [:kaocha.plugin/cloverage]
+  :cloverage/opts
+  {:codecov? true
+   :html? false}}
