@@ -3,7 +3,7 @@
             [tracky.domain.worklog-repository :refer [WorklogRepository -save!]]
             [tracky.infrastructure.http :as http]))
 
-(defn prepare-entry [entry jira-accont-id]
+(defn- prepare-entry [entry jira-accont-id]
   {:issueKey (-> entry :task-id)
    :timeSpentSeconds (-> entry :duration)
    :startDate (-> entry :start-date)
@@ -11,7 +11,7 @@
    :description (-> entry :description)
    :authorAccountId jira-accont-id})
 
-(defn auth [credential]
+(defn- auth [credential]
   (let [api-key (get-in credential [:tempo-api-key])]
     {:headers {:Authorization (str "Bearer " api-key)
                :Content-Type "application/json"}}))
