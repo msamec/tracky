@@ -1,2 +1,12 @@
 {:mocks.toggl-mock/toggl {}
- :tracky.domain/entry-repository {:impl #ig/ref :mocks.toggl-mock/toggl}}
+ :tracky.domain/entry-repository {:impl #ig/ref :mocks.toggl-mock/toggl}
+
+ :mocks.tempo-mock/tempo {}
+ :tracky.domain/worklog-repository {:impl #ig/ref :mocks.tempo-mock/tempo}
+
+ :helpers.auth/token {}
+ :duct.middleware.buddy/authentication
+ {:backend :token
+  :token-name "Bearer"
+  :authfn  #ig/ref :helpers.auth/token}
+ :duct.middleware.web/defaults {:security  {:anti-forgery false}}}

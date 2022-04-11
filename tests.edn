@@ -7,4 +7,5 @@
   :plugins [:kaocha.plugin/cloverage]
   :cloverage/opts
   {:codecov? true
-   :html? false}}
+   :html? true
+   :ns-exclude-regex ["tracky.presentation.templates.*" "tracky.main"]}}
