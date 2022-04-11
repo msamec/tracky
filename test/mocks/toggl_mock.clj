@@ -23,10 +23,17 @@
   [_]
   {:status 200
    :body (json/write-str entries-list)})
+(defmethod parse-type "single"
+  [_]
+  {:status 200
+   :body (json/write-str entry-single)})
 (defmethod parse-type "empty"
   [_response]
   {:status 200
    :body (json/write-str [])})
+(defmethod parse-type "not-found"
+  [_response]
+  {:status 404})
 (defmethod parse-type "error"
   [_response]
   {:status 500})
@@ -35,11 +42,11 @@
   (with-redefs [client/get (fn [_url _params] (parse-type toggl-api-key))]
     (toggl/all! [])))
 
-(defn one! [_id _credential]
-  {})
+(defn one! [_id {:keys [toggl-api-key]}]
+  (with-redefs [client/get (fn [_url _params] (parse-type toggl-api-key))]
+    (toggl/one! "id" [])))
 
-(defn add-tags! [_ids _credential]
-  {})
+(defn add-tags! [_ids _credential])
 
 (defmethod ig/init-key :mocks.toggl-mock/toggl [_ _]
   (reify EntryRepository
