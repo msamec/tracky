@@ -7,13 +7,16 @@
 
 (defn auth [api-key] {:basic-auth [api-key "api_token"]})
 
+(def now "2022-03-13T08:40:32.882Z")
+
 (deftest tracky-infrastructure-services-toggl
   (testing "when calling 'all!'"
     (testing "given entries exists then reutrn list of entries"
       (let [type "entries-list"]
         (providing
-         [(http/send-get "https://api.track.toggl.com/api/v8/time_entries" (auth type)) toggl-mock/entries-list]
-         (let [result (SUT/all! {:toggl-api-key type})
+         [(http/send-get (str "https://api.track.toggl.com/api/v8/time_entries?start_date=" now) (auth type)) toggl-mock/entries-list]
+         (let [result (SUT/all! {:toggl-api-key type
+                                 :start-date now})
                entry (first result)]
            (is (= 1 (count result)))
            (is (instance? tracky.domain.entry.Entry entry))))))
@@ -21,8 +24,9 @@
     (testing "given entries do not exist then return empty list"
       (let [type "empty"]
         (providing
-         [(http/send-get "https://api.track.toggl.com/api/v8/time_entries" (auth type)) []]
-         (let [result (SUT/all! {:toggl-api-key type})]
+         [(http/send-get (str "https://api.track.toggl.com/api/v8/time_entries?start_date=" now) (auth type)) []]
+         (let [result (SUT/all! {:toggl-api-key type
+                                 :start-date now})]
            (is (= 0 (count result))))))))
 
   (testing "when calling 'one!'"

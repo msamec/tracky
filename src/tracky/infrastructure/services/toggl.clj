@@ -1,5 +1,7 @@
 (ns tracky.infrastructure.services.toggl
   (:require [clojure.string :as str]
+            [clj-time.core :as t]
+            [clj-time.format :as f]
             [integrant.core :as ig]
             [tracky.domain.entry :refer [create-entry]]
             [tracky.domain.entry-repository :refer [EntryRepository -all! -one! -add-tags!]]
@@ -24,39 +26,48 @@
    remove-with-negative-duration
    (map create)))
 
-(defn- auth [credential]
-  (let [api-key (get-in credential [:toggl-api-key])]
+(defn- auth [options]
+  (let [api-key (get-in options [:toggl-api-key])]
     {:basic-auth [api-key "api_token"]}))
 
-(defn all! [credential]
-  (let [url "https://api.track.toggl.com/api/v8/time_entries"]
+(def month-ago
+  (let [now (t/now)
+        one-month-ago (t/minus now (t/months 1))]
+    (f/unparse (f/formatters :date-time) one-month-ago)))
+
+(defn- start-date [{:keys [start-date] :or {start-date month-ago}}]
+  start-date)
+
+(defn all!
+  [options]
+  (let [url (str "https://api.track.toggl.com/api/v8/time_entries?start_date=" (start-date options))]
     (->
      url
-     (http/send-get (auth credential))
+     (http/send-get (auth options))
      map-values)))
 
-(defn one! [id credential]
+(defn one! [id options]
   (let [url (str "https://api.track.toggl.com/api/v8/time_entries/" id)]
     (->
      url
-     (http/send-get (auth credential))
+     (http/send-get (auth options))
      :data
      list
      map-values
      first)))
 
-(defn add-tags! [ids credential]
+(defn add-tags! [ids options]
   (let [url (str "https://api.track.toggl.com/api/v8/time_entries/" (str/join "," ids))]
     (->
      url
      (http/send-put
-      (auth credential)
+      (auth options)
       {:time_entry
        {:tags ["synced"]
         :tag_action "add"}}))))
 
 (defmethod ig/init-key :tracky.infrastructure.services/toggl [_ _]
   (reify EntryRepository
-    (-all! [this credential] (all! credential))
-    (-one! [this id credential] (one! id credential))
-    (-add-tags! [this ids credential] (add-tags! ids credential))))
+    (-all! [this options] (all! options))
+    (-one! [this id options] (one! id options))
+    (-add-tags! [this ids options] (add-tags! ids options))))
