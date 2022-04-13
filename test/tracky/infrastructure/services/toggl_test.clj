@@ -1,7 +1,9 @@
 (ns tracky.infrastructure.services.toggl-test
   (:require [clojure.test :refer [is deftest testing]]
-            [mockfn.macros :refer [providing]]
+            [mockfn.macros :refer [providing verifying]]
+            [mockfn.matchers :refer [exactly]]
             [tracky.infrastructure.services.toggl :as SUT]
+            [clojure.string :as str]
             [tracky.infrastructure.http :as http]
             [mocks.toggl-mock :as toggl-mock]))
 
@@ -35,4 +37,17 @@
         (providing
          [(http/send-get "https://api.track.toggl.com/api/v8/time_entries/id" (auth type)) toggl-mock/entry-single]
          (let [entry (SUT/one! "id" {:toggl-api-key type})]
-           (is (instance? tracky.domain.entry.Entry entry))))))))
+           (is (instance? tracky.domain.entry.Entry entry)))))))
+
+  (testing "when calling 'add-tags!'"
+    (testing "then make sure http/put is called"
+      (let [ids ["1"]]
+        (verifying
+         [(http/send-put
+           (str "https://api.track.toggl.com/api/v8/time_entries/" (str/join "," ids))
+           (auth "")
+           {:time_entry {:tags ["synced"] :tag_action "add"}})
+          nil
+          (exactly 1)]
+         (SUT/add-tags! ids {:toggl-api-key ""})
+         (is true))))))
