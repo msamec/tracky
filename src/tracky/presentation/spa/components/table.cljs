@@ -59,15 +59,16 @@
         [td (seconds->duration duration)]
         [td start-date]
         [td (if syncable "Yes" "no")]
-        [td [:button
-             {:class "bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded"
-              :value id
-              :on-click (fn [e]
-                          (let [id (-> e .-target .-value)]
-                            (->
-                             (sync id)
-                             (.then #(refresh)))))}
-             "Sync"]]]))])
+        [td (when syncable
+              [:button
+               {:class "bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded"
+                :value id
+                :on-click (fn [e]
+                            (let [id (-> e .-target .-value)]
+                              (->
+                               (sync id)
+                               (.then #(refresh)))))}
+               "Sync"])]]))])
 
 (defn Table []
   [:div
