@@ -10,8 +10,10 @@
             ["/api"
              ["/entries"
               ["/list" {:get {:handler #ig/ref :tracky.presentation.http.controllers.api.entries-ctrl/list}}]
+              ["/single/:id" {:get {:handler #ig/ref :tracky.presentation.http.controllers.api.entries-ctrl/single}}]
               ["/sync/:id" {:post {:handler #ig/ref :tracky.presentation.http.controllers.api.entries-ctrl/sync}}]
-              ["/sync-all" {:post {:handler #ig/ref :tracky.presentation.http.controllers.api.entries-ctrl/sync-all}}]]]]
+              ["/sync-all" {:post {:handler #ig/ref :tracky.presentation.http.controllers.api.entries-ctrl/sync-all}}]
+              ["/update-description/:id" {:post {:handler #ig/ref :tracky.presentation.http.controllers.api.entries-ctrl/update-description}}]]]]
    :reitit.ring/opts {:data #ig/ref :tracky.infrastructure.reitit/opts}
    :reitit.ring/deafult-handlers {}}
 
@@ -26,9 +28,11 @@
   :tracky.infrastructure.services/tempo {}
   :tracky.domain/worklog-repository {:impl #ig/ref :tracky.infrastructure.services/tempo}
 
+  :tracky.presentation.http.controllers.api.entries-ctrl/single {}
   :tracky.presentation.http.controllers.api.entries-ctrl/list {}
   :tracky.presentation.http.controllers.api.entries-ctrl/sync {}
   :tracky.presentation.http.controllers.api.entries-ctrl/sync-all {}
+  :tracky.presentation.http.controllers.api.entries-ctrl/update-description {}
 
   :tracky.presentation.http.controllers.frontend.main-ctrl/index {}
 

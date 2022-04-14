@@ -2,6 +2,7 @@
   (:require [tracky.presentation.spa.helpers.date :refer [seconds->duration]]
             [clojure.string :as str]
             [reagent.core :as r]
+            [reitit.frontend.easy :as rfe]
             [tracky.presentation.spa.api :refer [sync sync-all fetch-entries]]))
 
 (defonce entries (r/atom []))
@@ -27,6 +28,7 @@
   [:thead
    {:class "bg-white border-b"}
    [:tr
+    [th ""]
     [th "Original description"]
     [th "Jira task id"]
     [th "Description"]
@@ -53,12 +55,18 @@
        [:tr
         {:key id
          :class (str/join " " ["border-b transition duration-300 ease-in-out" bg-color])}
-        [td original-description]
+        [td [:a
+             {:class "bg-yellow-300 hover:bg-yellow-500 text-black py-1 px-2 rounded"
+              :href (rfe/href :update-entry {:id id})}
+             "Edit"]]
+        [:td
+         {:class "text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"}
+         original-description]
         [td task-id]
         [td description]
         [td (seconds->duration duration)]
         [td start-date]
-        [td (if syncable "Yes" "no")]
+        [td (if syncable "Yes" "No")]
         [td (when syncable
               [:button
                {:class "bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded"
