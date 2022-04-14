@@ -50,4 +50,17 @@
           nil
           (exactly 1)]
          (SUT/add-tags! ids {:toggl-api-key ""})
+         (is true)))))
+
+  (testing "when calling 'update-description!'"
+    (testing "then make sure http/put is called"
+      (let [id "id" desc "desc"]
+        (verifying
+         [(http/send-put
+           (str "https://api.track.toggl.com/api/v8/time_entries/" id)
+           (auth "")
+           {:time_entry {:description desc}})
+          nil
+          (exactly 1)]
+         (SUT/update-description! id desc {:toggl-api-key ""})
          (is true))))))

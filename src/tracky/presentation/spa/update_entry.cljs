@@ -2,8 +2,7 @@
   (:require [tracky.presentation.spa.components.alert :refer [success]]
             [reitit.frontend.easy :as rfe]
             [reagent.core :as r]
-            [tracky.presentation.spa.api :refer [sync fetch-entry]]
-            [tracky.presentation.spa.api :refer [update-description]]))
+            [tracky.presentation.spa.api :refer [fetch-entry update-description]]))
 
 (def entry (r/atom {:original-description nil}))
 

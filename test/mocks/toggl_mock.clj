@@ -48,8 +48,11 @@
 
 (defn add-tags! [_ids _credential])
 
+(defn update-description! [_ids _desc _credential])
+
 (defmethod ig/init-key :mocks.toggl-mock/toggl [_ _]
   (reify EntryRepository
     (-all! [this credential] (all! credential))
     (-one! [this id credential] (one! id credential))
-    (-add-tags! [this ids credential] (add-tags! ids credential))))
+    (-add-tags! [this ids credential] (add-tags! ids credential))
+    (-update-description! [this id desc credential] (update-description! id desc credential))))
