@@ -56,6 +56,15 @@
    (.then #(extract-body %))
    (.then #(reset! entries (:data %)))))
 
+(defn fetch-entry [id entry]
+  (loading-on)
+  (->
+   (fetch/get (str "/api/entries/single/" id) (options))
+   (.then #(handle-response %))
+   (.then #(extract-body %))
+   (.then #(reset! entry (:data %)))
+   (.finally #(loading-off))))
+
 (defn sync [id]
   (loading-on)
   (->
@@ -78,5 +87,11 @@
    (.then #(handle-response %))
    (.then #(extract-body %))))
 
-
-
+(defn update-description [id description fn]
+  (loading-on)
+  (->
+   (fetch/post (str "/api/entries/update-description/" id) (options {:body {:description description}}))
+   (.then #(handle-response %))
+   (.then #(extract-body %))
+   (.then fn)
+   (.finally #(loading-off))))

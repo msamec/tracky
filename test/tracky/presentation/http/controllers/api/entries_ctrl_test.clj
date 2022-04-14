@@ -11,6 +11,8 @@
 (def list-entries "/api/entries/list")
 (def sync-entry "/api/entries/sync")
 (def sync-all-entries "/api/entries/sync-all")
+(def single-entry "/api/entries/single")
+(def update-entry-description "/api/entries/update-description")
 
 (def default {:throw-exceptions false})
 
@@ -71,4 +73,28 @@
                                :x-tempo-api-key "api-key"
                                :x-jira-account-id "jira"}}
             response (client/post (str url sync-all-entries) (merge default headers))]
+        (is (= 200 (:status response))))))
+
+  (testing "when calling `/api/entries/single/:id`"
+    (testing "given no access token then response should return 401 status"
+      (let [response (client/get (str url single-entry "/id") default)]
+        (is (= 401 (:status response)))))
+
+    (testing "given there is entry then response should return 200 status"
+      (let [headers {:headers {:authorization (str "Bearer " token)
+                               :x-toggl-api-key "single"}}
+            response (client/get (str url single-entry "/id") (merge default headers))
+            entry (-> response :body (json/read-str :key-fn keyword) :data)]
+        (is (= 200 (:status response)))
+        (is (= "123" (:id entry))))))
+
+  (testing "when calling `/api/entries/update-description/:id`"
+    (testing "given no access token then response should return 401 status"
+      (let [response (client/post (str url update-entry-description "/id") default)]
+        (is (= 401 (:status response)))))
+
+    (testing "given there are entries then response should return 200 status"
+      (let [headers {:headers {:authorization (str "Bearer " token)
+                               :x-toggl-api-key "single"}}
+            response (client/post (str url update-entry-description "/id") (merge default headers))]
         (is (= 200 (:status response)))))))

@@ -4,7 +4,7 @@
             [clj-time.format :as f]
             [integrant.core :as ig]
             [tracky.domain.entry :refer [create-entry]]
-            [tracky.domain.entry-repository :refer [EntryRepository -all! -one! -add-tags!]]
+            [tracky.domain.entry-repository :refer [EntryRepository -all! -one! -add-tags! -update-description!]]
             [tracky.infrastructure.http :as http]))
 
 (defn- remove-synced [data]
@@ -66,8 +66,18 @@
        {:tags ["synced"]
         :tag_action "add"}}))))
 
+(defn update-description! [id desc options]
+  (let [url (str "https://api.track.toggl.com/api/v8/time_entries/" id)]
+    (->
+     url
+     (http/send-put
+      (auth options)
+      {:time_entry
+       {:description desc}}))))
+
 (defmethod ig/init-key :tracky.infrastructure.services/toggl [_ _]
   (reify EntryRepository
     (-all! [this options] (all! options))
     (-one! [this id options] (one! id options))
-    (-add-tags! [this ids options] (add-tags! ids options))))
+    (-add-tags! [this ids options] (add-tags! ids options))
+    (-update-description! [this id desc options] (update-description! id desc options))))
