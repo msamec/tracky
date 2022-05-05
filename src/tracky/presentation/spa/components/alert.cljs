@@ -7,10 +7,11 @@
 (defonce message (r/atom ""))
 (defonce message-title (r/atom "Alert"))
 
-(defn hidden-class [] (if (true? @hidden) "hidden" ""))
+(defn hidden-class [] (if (true? @hidden) "opacity-0 z-[-1]" "opacity-100"))
 
 (defn reset [text type title]
   (reset! hidden false)
+  (js/setTimeout #(reset! hidden true) 5000)
   (reset! alert-type type)
   (reset! message text)
   (reset! message-title title))
@@ -29,10 +30,10 @@
 
 (defn Alert []
   [:div
-   {:class (str/join " " ["max-w-xl mx-auto rounded-md shadow-sm" (hidden-class)])}
+   {:class (str/join " " ["transition ease-in-out duration-500 fixed left-0 right-0 top-6 max-w-xl mx-auto rounded-md shadow-sm" (hidden-class)])}
    [:div
     {:id "alert-additional-content-2"
-     :class (str "p-4 mb-4 bg-" @alert-type "-100 rounded-lg dark:bg-" @alert-type "-200")
+     :class (str "p-4 bg-" @alert-type "-100 rounded-lg dark:bg-" @alert-type "-200")
      :role "alert"}
     [:div
      {:class "flex items-center"}
