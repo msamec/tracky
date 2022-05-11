@@ -9,12 +9,13 @@
             [eftest.runner :as eftest]
             [integrant.core :as ig]
             [integrant.repl :refer [clear halt go init prep reset]]
-            [integrant.repl.state :refer [config system]]))
+            [integrant.repl.state :refer [config system]]
+            [tracky.infrastructure.readers :refer [readers]]))
 
 (duct/load-hierarchy)
 
 (defn read-config []
-  (duct/read-config (io/resource "tracky/config.edn")))
+  (duct/read-config (io/resource "tracky/config.edn") readers))
 
 (defn test []
   (eftest/run-tests (eftest/find-tests "test")))
