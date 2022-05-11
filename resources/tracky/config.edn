@@ -13,7 +13,8 @@
               ["/single/:id" {:get {:handler #ig/ref :tracky.presentation.http.controllers.api.entries-ctrl/single}}]
               ["/sync/:id" {:post {:handler #ig/ref :tracky.presentation.http.controllers.api.entries-ctrl/sync}}]
               ["/sync-all" {:post {:handler #ig/ref :tracky.presentation.http.controllers.api.entries-ctrl/sync-all}}]
-              ["/update-description/:id" {:post {:handler #ig/ref :tracky.presentation.http.controllers.api.entries-ctrl/update-description}}]]]]
+              ["/update-description/:id" {:post {:handler #ig/ref :tracky.presentation.http.controllers.api.entries-ctrl/update-description}}]]
+             ["/v2" #ig/ref :tracky.presentation.http.controllers.api.funicular-ctrl/funicular]]]
    :reitit.ring/opts {:data #ig/ref :tracky.infrastructure.reitit/opts}
    :reitit.ring/deafult-handlers {}}
 
@@ -28,6 +29,18 @@
   :tracky.infrastructure.services/tempo {}
   :tracky.domain/worklog-repository {:impl #ig/ref :tracky.infrastructure.services/tempo}
 
+  :tracky.infrastructure/funicular #duct/include "tracky/funicular.edn"
+  :tracky.infrastructure.interceptors.current-user/assoc {:authfn #ig/ref :magnet.buddy-auth/jwt-oidc}
+
+  :tracky.presentation.handlers.entry/list-entries {}
+  :tracky.presentation.handlers.entry/single-entry {}
+  :tracky.presentation.handlers.entry/update-entry {}
+  :tracky.presentation.handlers.entry/sync-single-entry {}
+  :tracky.presentation.handlers.entry/sync-all-entries {}
+  :tracky.presentation.handlers.settings/update {}
+  :tracky.presentation.handlers.settings/show {}
+
+  :tracky.presentation.http.controllers.api.funicular-ctrl/funicular {:funicular #ig/ref :tracky.infrastructure/funicular}
   :tracky.presentation.http.controllers.api.entries-ctrl/single {}
   :tracky.presentation.http.controllers.api.entries-ctrl/list {}
   :tracky.presentation.http.controllers.api.entries-ctrl/sync {}
@@ -50,7 +63,9 @@
   :duct.middleware.buddy/authentication
   {:backend :token
    :token-name "Bearer"
-   :authfn  #ig/ref :magnet.buddy-auth/jwt-oidc}}
+   :authfn  #ig/ref :magnet.buddy-auth/jwt-oidc}
+
+  :duct.middleware.web/defaults {:security {:anti-forgery false}}}
 
  :duct.profile/dev   #duct/include "dev"
  :duct.profile/local #duct/include "local"

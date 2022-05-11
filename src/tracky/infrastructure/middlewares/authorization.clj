@@ -9,7 +9,7 @@
     (success)
     (error)))
 
-(def rules [{:pattern #"^/api.*$"
+(def rules [{:pattern #"^\/api(?!\/v2).*$"
              :handler authenticated-access}])
 
 (defn on-error

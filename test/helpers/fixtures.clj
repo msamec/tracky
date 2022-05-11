@@ -1,7 +1,8 @@
 (ns helpers.fixtures
   (:require [duct.core :as duct]
             [integrant.core :as ig]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [tracky.infrastructure.readers :refer [readers]]))
 
 (def state* (atom nil))
 
@@ -11,7 +12,7 @@
   (@state* :system))
 
 (defn read-config []
-  (duct/read-config (io/resource "tracky/config.edn")))
+  (duct/read-config (io/resource "tracky/config.edn") readers))
 
 (defn init-system! []
   (duct/load-hierarchy)

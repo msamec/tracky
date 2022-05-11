@@ -1,0 +1,44 @@
+{:api
+ [:api
+  {:interceptors [{:enter #ig/ref :tracky.infrastructure.interceptors.current-user/assoc}]
+   :input-schema [:map
+                  [:tracky/jwt {:optional true}]]}
+  [:entries
+   {:rules #resolve tracky.infrastructure.rules/logged-in?
+    :commands
+    {:sync-single-entry
+     {:input-schema :entry/id
+      :output-schema :any
+      :handler #ig/ref :tracky.presentation.handlers.entry/sync-single-entry}
+     :sync-all-entries
+     {:input-schema :any
+      :output-schema :any
+      :handler #ig/ref :tracky.presentation.handlers.entry/sync-all-entries}
+     :update-entry
+     {:input-schema :tracky.entry/update
+      :output-schema :any
+      :handler #ig/ref :tracky.presentation.handlers.entry/update-entry}}
+    :queries
+    {:list-entries
+     {:input-schema  :any
+      :output-schema :tracky/entries
+      :handler #ig/ref :tracky.presentation.handlers.entry/list-entries}
+     :single-entry
+     {:input-schema :entry/id
+      :output-schema :tracky/entry
+      :handler #ig/ref :tracky.presentation.handlers.entry/single-entry}}}]
+  [:settings
+   {:rules #resolve tracky.infrastructure.rules/logged-in?
+    :commands
+    {:update
+     {:input-schema :tracky.settings/update
+      :output-schema :tracky/settings
+      :handler #ig/ref :tracky.presentation.handlers.settings/update}}
+    :queries
+    {:show
+     {:input-schema :any
+      :output-schema :tracky/settings
+      :handler #ig/ref :tracky.presentation.handlers.settings/show}}}]]
+ :pipes {}
+ :context {}
+ :logger #ig/ref :duct.logger/timbre}
