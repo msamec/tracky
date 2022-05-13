@@ -9,14 +9,21 @@
 
 (defn refresh [] (fetch-entries entries))
 
+(defn settings [] 
+  [:a
+   {:class "bg-yellow-300 hover:bg-yellow-500 text-black py-1 px-2 rounded"
+    :href (rfe/href :settings {})}
+   "Settings"])
+
 (defn up-to-date []
   [:div
    {:class "container mx-auto"}
    [:div
-    {:class "max-w-xl p-5 mx-auto my-10 bg-white rounded-md shadow-sm"}
+    {:class "max-w-xl p-5 mx-auto bg-white rounded-md shadow-sm"}
     [:span
      {:class "inline-flex px-2"}
-     "You are up to date! :)"]]])
+     "You are up to date! :)"]
+    (settings)]])
 
 (defn th [content]
   [:th
@@ -28,7 +35,7 @@
   [:thead
    {:class "bg-white border-b"}
    [:tr
-    [th ""]
+    [th (settings)]
     [th "Original description"]
     [th "Jira task id"]
     [th "Description"]
