@@ -21,6 +21,9 @@
     [""
      {:name :entries
       :view Entries}]
+    ["settings"
+     {:name :settings
+      :view Settings}]
     ["update-entry/:id"
      {:name :update-entry
       :parameters {:path {:id s/Str}}
@@ -36,9 +39,7 @@
      (if-not (nil? @authenticated)
        (when @match
          (let [view (:view (:data @match))]
-           [:<>
-            [view @match]
-            [Settings]]))
+           [view @match]))
        [OAuth2])]]])
 
 (defn init! []
