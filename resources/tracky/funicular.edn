@@ -32,11 +32,11 @@
     :commands
     {:update
      {:input-schema :tracky.settings/update
-      :output-schema :tracky/settings
+      :output-schema :any
       :handler #ig/ref :tracky.presentation.handlers.settings/update}}
     :queries
     {:show
-     {:input-schema :any
+     {:input-schema [:map :tracky/jwt]
       :output-schema :tracky/settings
       :handler #ig/ref :tracky.presentation.handlers.settings/show}}}]]
  :pipes {}

@@ -16,12 +16,16 @@
                  [clj-jwt/clj-jwt "0.1.1"]
                  [metosin/muuntaja "0.6.8"]
                  [metosin/malli "0.8.0"]
-                 [com.verybigthings/funicular "fb4cb3ae49a9246f4489396c047779b73e9c82ba"]]
+                 [com.verybigthings/funicular "6e8226ff1469436e89743a5281c25033d9076fb8"]
+                 [com.widdindustries/time-literals "0.1.8"]
+                 [com.datomic/datomic-pro "1.0.6397"]]
   :plugins [[duct/lein-duct "0.12.3"]
             [reifyhealth/lein-git-down "0.4.1"]
             [lein-cljfmt "0.8.0"]
             [com.github.clj-kondo/lein-clj-kondo "0.1.3"]]
-  :repositories [["public-github" {:url "git://github.com"}]]
+  :repositories [["public-github" {:url "git://github.com"}]
+                 ["my.datomic.com" {:url "https://my.datomic.com/repo"
+                                    :creds :gpg}]]
   :git-down {com.verybigthings/penkala {:coordinates retro/penkala}
              com.verybigthings/funicular {:coordinates verybigthings/funicular}}
   :main ^:skip-aot tracky.main
@@ -47,7 +51,6 @@
    :profiles/test {}
    :project/test {:dependencies [[lambdaisland/kaocha "1.64.1010"]
                                  [lambdaisland/kaocha-cloverage "1.0.75"]
-                                 [nubank/mockfn "0.7.0"]
-                                 [com.widdindustries/time-literals "0.1.8"]]}}
+                                 [nubank/mockfn "0.7.0"]]}}
   :aliases
   {"kaocha" ["with-profile" "+test" "run" "-m" "kaocha.runner"]})
