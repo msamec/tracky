@@ -22,12 +22,17 @@
                                       :access-rules #ig/ref :tracky.infrastructure.middlewares/authorization}
 
   :tracky.infrastructure.middlewares/authorization {}
+  :tracky.infrastructure.xtdb.node/config {:db-uri #duct/env ["DB_URI" Str]}
+  :tracky.infrastructure.xtdb.client/start {:node-config #ig/ref :tracky.infrastructure.xtdb.node/config}
 
   :tracky.infrastructure.services/toggl {}
   :tracky.domain/entry-repository {:impl #ig/ref :tracky.infrastructure.services/toggl}
 
   :tracky.infrastructure.services/tempo {}
   :tracky.domain/worklog-repository {:impl #ig/ref :tracky.infrastructure.services/tempo}
+
+  :tracky.infrastructure.xtdb/settings {}
+  :tracky.domain/settings-repository {:impl #ig/ref :tracky.infrastructure.xtdb/settings}
 
   :tracky.infrastructure/funicular #duct/include "tracky/funicular.edn"
   :tracky.infrastructure.interceptors.current-user/assoc {:authfn #ig/ref :magnet.buddy-auth/jwt-oidc}

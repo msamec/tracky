@@ -28,6 +28,7 @@
     :tracky.entry/update [:map
                           [:description :entry/description]]
 
+    :settings/user-id [:string]
     :settings/toggl-api-key [:string]
     :settings/tempo-api-key [:string]
     :settings/jira-account-id [:string]
