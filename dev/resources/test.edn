@@ -4,6 +4,8 @@
  :mocks.tempo-mock/tempo {}
  :tracky.domain/worklog-repository {:impl #ig/ref :mocks.tempo-mock/tempo}
 
+ :tracky.infrastructure.xtdb.client/start {:node-config {}}
+
  :helpers.auth/token {}
  :duct.middleware.buddy/authentication
  {:backend :token
