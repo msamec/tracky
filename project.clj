@@ -18,14 +18,14 @@
                  [metosin/malli "0.8.0"]
                  [com.verybigthings/funicular "6e8226ff1469436e89743a5281c25033d9076fb8"]
                  [com.widdindustries/time-literals "0.1.8"]
-                 [com.datomic/datomic-pro "1.0.6397"]]
+                 [com.xtdb/xtdb-core "1.21.0"]
+                 [com.xtdb/xtdb-jdbc "1.21.0"]
+                 [org.postgresql/postgresql "42.3.5"]]
   :plugins [[duct/lein-duct "0.12.3"]
             [reifyhealth/lein-git-down "0.4.1"]
             [lein-cljfmt "0.8.0"]
             [com.github.clj-kondo/lein-clj-kondo "0.1.3"]]
-  :repositories [["public-github" {:url "git://github.com"}]
-                 ["my.datomic.com" {:url "https://my.datomic.com/repo"
-                                    :creds :gpg}]]
+  :repositories [["public-github" {:url "git://github.com"}]]
   :git-down {com.verybigthings/penkala {:coordinates retro/penkala}
              com.verybigthings/funicular {:coordinates verybigthings/funicular}}
   :main ^:skip-aot tracky.main
