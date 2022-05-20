@@ -21,9 +21,9 @@
      :defaultValue (key local-storage)
      :type "text"
      :on-change (fn [e]
-                (.preventDefault e)
-                (let [v (-> e .-target .-value)]
-                  (swap! credential assoc key v)))}]])
+                  (.preventDefault e)
+                  (let [v (-> e .-target .-value)]
+                    (swap! credential assoc key v)))}]])
 
 (defn Settings []
   [:div

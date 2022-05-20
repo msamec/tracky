@@ -9,7 +9,7 @@
 
 (defn refresh [] (fetch-entries entries))
 
-(defn settings [] 
+(defn settings []
   [:a
    {:class "bg-yellow-300 hover:bg-yellow-500 text-black py-1 px-2 rounded"
     :href (rfe/href :settings {})}
